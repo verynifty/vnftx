@@ -1,0 +1,5 @@
+/artifacts
+/cache
+
+# dependencies
+/node_modules
