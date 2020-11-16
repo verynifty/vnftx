@@ -18,4 +18,4 @@
 1. run `npm run console`
 1. `const VNFTxV2 = await ethers.getContractFactory("VNFTxV2");`
 1. `const vnft = await VNFTxV2.attach(proxyAddress)` > This is the new contract that should hold the old contract store.
-1. now `vnftxv2` should have old storage with new functions.
+1. now `vnft` should have old storage with new functions.
