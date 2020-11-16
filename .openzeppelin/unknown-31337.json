@@ -887,9 +887,9 @@
         }
       }
     },
-    "b563c990db95d7c08f62905fbd1824d77b3cd452c82860dce052960eb18d35dc": {
+    "012a3e5e3dc172cc53f5fba77ade0351d7eff488bf439b458ab88227356c44e3": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x2b7ec5a42515b6cdecf954bd39b87395d6d5e18878c6413f3ebd20914073187a",
+      "txHash": "0xab5b9cb26b818666e0b60a1da243e9f8971748e7947500f108a9913949043646",
       "layout": {
         "storage": [
           {
@@ -950,152 +950,146 @@
             "contract": "VNFTx",
             "label": "paused",
             "type": "t_bool",
-            "src": "contracts/VNFTx.sol:112"
-          },
-          {
-            "contract": "VNFTx",
-            "label": "total",
-            "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:113"
+            "src": "contracts/VNFTx.sol:109"
           },
           {
             "contract": "VNFTx",
             "label": "vnft",
-            "type": "t_contract(IVNFT)4363",
-            "src": "contracts/VNFTx.sol:115"
+            "type": "t_contract(IVNFT)3204",
+            "src": "contracts/VNFTx.sol:111"
           },
           {
             "contract": "VNFTx",
             "label": "muse",
-            "type": "t_contract(IMuseToken)4198",
-            "src": "contracts/VNFTx.sol:116"
+            "type": "t_contract(IMuseToken)3039",
+            "src": "contracts/VNFTx.sol:112"
           },
           {
             "contract": "VNFTx",
             "label": "addons",
             "type": "t_contract(IERC1155)1302",
-            "src": "contracts/VNFTx.sol:117"
+            "src": "contracts/VNFTx.sol:113"
           },
           {
             "contract": "VNFTx",
             "label": "artistPct",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:119"
+            "src": "contracts/VNFTx.sol:115"
           },
           {
             "contract": "VNFTx",
             "label": "addon",
-            "type": "t_mapping(t_uint256,t_struct(Addon)1340_storage)",
-            "src": "contracts/VNFTx.sol:134"
+            "type": "t_mapping(t_uint256,t_struct(Addon)1338_storage)",
+            "src": "contracts/VNFTx.sol:130"
           },
           {
             "contract": "VNFTx",
             "label": "addonsConsumed",
             "type": "t_mapping(t_uint256,t_struct(UintSet)1044_storage)",
-            "src": "contracts/VNFTx.sol:136"
+            "src": "contracts/VNFTx.sol:132"
           },
           {
             "contract": "VNFTx",
             "label": "lockedAddons",
             "type": "t_struct(UintSet)1044_storage",
-            "src": "contracts/VNFTx.sol:137"
+            "src": "contracts/VNFTx.sol:133"
           },
           {
             "contract": "VNFTx",
             "label": "rarity",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "contracts/VNFTx.sol:140"
+            "src": "contracts/VNFTx.sol:136"
           },
           {
             "contract": "VNFTx",
             "label": "challengesUsed",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "contracts/VNFTx.sol:141"
+            "src": "contracts/VNFTx.sol:137"
           },
           {
             "contract": "VNFTx",
             "label": "healthGemScore",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:144"
+            "src": "contracts/VNFTx.sol:140"
           },
           {
             "contract": "VNFTx",
             "label": "healthGemId",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:145"
+            "src": "contracts/VNFTx.sol:141"
           },
           {
             "contract": "VNFTx",
             "label": "healthGemPrice",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:146"
+            "src": "contracts/VNFTx.sol:142"
           },
           {
             "contract": "VNFTx",
             "label": "healthGemDays",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:147"
+            "src": "contracts/VNFTx.sol:143"
           },
           {
             "contract": "VNFTx",
             "label": "premiumHp",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:150"
+            "src": "contracts/VNFTx.sol:146"
           },
           {
             "contract": "VNFTx",
             "label": "hpMultiplier",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:151"
+            "src": "contracts/VNFTx.sol:147"
           },
           {
             "contract": "VNFTx",
             "label": "rarityMultiplier",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:152"
+            "src": "contracts/VNFTx.sol:148"
           },
           {
             "contract": "VNFTx",
             "label": "addonsMultiplier",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:153"
+            "src": "contracts/VNFTx.sol:149"
           },
           {
             "contract": "VNFTx",
             "label": "expectedAddons",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:155"
+            "src": "contracts/VNFTx.sol:151"
           },
           {
             "contract": "VNFTx",
             "label": "expectedRarity",
             "type": "t_uint256",
-            "src": "contracts/VNFTx.sol:157"
+            "src": "contracts/VNFTx.sol:153"
           },
           {
             "contract": "VNFTx",
             "label": "_addonId",
             "type": "t_struct(Counter)704_storage",
-            "src": "contracts/VNFTx.sol:160"
+            "src": "contracts/VNFTx.sol:156"
           }
         ],
         "types": {
           "t_bool": {
             "label": "bool"
           },
-          "t_uint256": {
-            "label": "uint256"
-          },
-          "t_contract(IVNFT)4363": {
+          "t_contract(IVNFT)3204": {
             "label": "contract IVNFT"
           },
-          "t_contract(IMuseToken)4198": {
+          "t_contract(IMuseToken)3039": {
             "label": "contract IMuseToken"
           },
           "t_contract(IERC1155)1302": {
             "label": "contract IERC1155"
           },
-          "t_mapping(t_uint256,t_struct(Addon)1340_storage)": {
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Addon)1338_storage)": {
             "label": "mapping(uint256 => struct VNFTx.Addon)"
           },
           "t_mapping(t_uint256,t_struct(UintSet)1044_storage)": {
@@ -1125,9 +1119,9 @@
         }
       }
     },
-    "343b576e3dfc36279c8a70b5cf8d1f1226658a31ca732844c50b505436651564": {
+    "2668392603a213cc6817414eda066e05e2e70bb717c7ba7a3c741814be2b5c50": {
       "address": "0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf",
-      "txHash": "0x8f496dd93d0733405570ed5e2ee9c880aae89d11d647b4be417f4c87eee68687",
+      "txHash": "0xe96b9a70d5f9e484f467469f24cbb0007ee06a6764a15d4dc1f4c898821092f8",
       "layout": {
         "storage": [
           {
@@ -1188,158 +1182,158 @@
             "contract": "VNFTxV2",
             "label": "paused",
             "type": "t_bool",
-            "src": "contracts/VNFTxV2.sol:116"
-          },
-          {
-            "contract": "VNFTxV2",
-            "label": "total",
-            "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:117"
+            "src": "contracts/VNFTxV2.sol:113"
           },
           {
             "contract": "VNFTxV2",
             "label": "vnft",
-            "type": "t_contract(IVNFT)2833",
-            "src": "contracts/VNFTxV2.sol:119"
+            "type": "t_contract(IVNFT)3204",
+            "src": "contracts/VNFTxV2.sol:115"
           },
           {
             "contract": "VNFTxV2",
             "label": "muse",
-            "type": "t_contract(IMuseToken)2668",
-            "src": "contracts/VNFTxV2.sol:120"
+            "type": "t_contract(IMuseToken)3039",
+            "src": "contracts/VNFTxV2.sol:116"
           },
           {
             "contract": "VNFTxV2",
             "label": "addons",
-            "type": "t_contract(IERC1155)1302",
-            "src": "contracts/VNFTxV2.sol:121"
+            "type": "t_contract(IERC1155)2807",
+            "src": "contracts/VNFTxV2.sol:117"
           },
           {
             "contract": "VNFTxV2",
             "label": "artistPct",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:123"
+            "src": "contracts/VNFTxV2.sol:119"
           },
           {
             "contract": "VNFTxV2",
             "label": "addon",
-            "type": "t_mapping(t_uint256,t_struct(Addon)1340_storage)",
-            "src": "contracts/VNFTxV2.sol:138"
+            "type": "t_mapping(t_uint256,t_struct(Addon)2843_storage)",
+            "src": "contracts/VNFTxV2.sol:134"
           },
           {
             "contract": "VNFTxV2",
             "label": "addonsConsumed",
             "type": "t_mapping(t_uint256,t_struct(UintSet)1044_storage)",
-            "src": "contracts/VNFTxV2.sol:140"
+            "src": "contracts/VNFTxV2.sol:136"
           },
           {
             "contract": "VNFTxV2",
             "label": "lockedAddons",
             "type": "t_struct(UintSet)1044_storage",
-            "src": "contracts/VNFTxV2.sol:141"
+            "src": "contracts/VNFTxV2.sol:137"
           },
           {
             "contract": "VNFTxV2",
             "label": "rarity",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "contracts/VNFTxV2.sol:144"
+            "src": "contracts/VNFTxV2.sol:140"
           },
           {
             "contract": "VNFTxV2",
             "label": "challengesUsed",
             "type": "t_mapping(t_uint256,t_uint256)",
-            "src": "contracts/VNFTxV2.sol:145"
+            "src": "contracts/VNFTxV2.sol:141"
           },
           {
             "contract": "VNFTxV2",
             "label": "healthGemScore",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:148"
+            "src": "contracts/VNFTxV2.sol:144"
           },
           {
             "contract": "VNFTxV2",
             "label": "healthGemId",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:149"
+            "src": "contracts/VNFTxV2.sol:145"
           },
           {
             "contract": "VNFTxV2",
             "label": "healthGemPrice",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:150"
+            "src": "contracts/VNFTxV2.sol:146"
           },
           {
             "contract": "VNFTxV2",
             "label": "healthGemDays",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:151"
+            "src": "contracts/VNFTxV2.sol:147"
           },
           {
             "contract": "VNFTxV2",
             "label": "premiumHp",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:154"
+            "src": "contracts/VNFTxV2.sol:150"
           },
           {
             "contract": "VNFTxV2",
             "label": "hpMultiplier",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:155"
+            "src": "contracts/VNFTxV2.sol:151"
           },
           {
             "contract": "VNFTxV2",
             "label": "rarityMultiplier",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:156"
+            "src": "contracts/VNFTxV2.sol:152"
           },
           {
             "contract": "VNFTxV2",
             "label": "addonsMultiplier",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:157"
+            "src": "contracts/VNFTxV2.sol:153"
           },
           {
             "contract": "VNFTxV2",
             "label": "expectedAddons",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:159"
+            "src": "contracts/VNFTxV2.sol:155"
           },
           {
             "contract": "VNFTxV2",
             "label": "expectedRarity",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:161"
+            "src": "contracts/VNFTxV2.sol:157"
           },
           {
             "contract": "VNFTxV2",
             "label": "_addonId",
             "type": "t_struct(Counter)704_storage",
-            "src": "contracts/VNFTxV2.sol:164"
+            "src": "contracts/VNFTxV2.sol:160"
           },
           {
             "contract": "VNFTxV2",
             "label": "newVar",
             "type": "t_uint256",
-            "src": "contracts/VNFTxV2.sol:182"
+            "src": "contracts/VNFTxV2.sol:178"
+          },
+          {
+            "contract": "VNFTxV2",
+            "label": "testVar",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV2.sol:180"
           }
         ],
         "types": {
           "t_bool": {
             "label": "bool"
           },
+          "t_contract(IVNFT)3204": {
+            "label": "contract IVNFT"
+          },
+          "t_contract(IMuseToken)3039": {
+            "label": "contract IMuseToken"
+          },
+          "t_contract(IERC1155)2807": {
+            "label": "contract IERC1155"
+          },
           "t_uint256": {
             "label": "uint256"
           },
-          "t_contract(IVNFT)2833": {
-            "label": "contract IVNFT"
-          },
-          "t_contract(IMuseToken)2668": {
-            "label": "contract IMuseToken"
-          },
-          "t_contract(IERC1155)1302": {
-            "label": "contract IERC1155"
-          },
-          "t_mapping(t_uint256,t_struct(Addon)1340_storage)": {
+          "t_mapping(t_uint256,t_struct(Addon)2843_storage)": {
             "label": "mapping(uint256 => struct VNFTxV2.Addon)"
           },
           "t_mapping(t_uint256,t_struct(UintSet)1044_storage)": {

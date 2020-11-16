@@ -378,33 +378,6 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         addons.safeTransferFrom(address(this), msg.sender, _addonID, 1, "0x0");
     }
 
-    function removeMultiple(
-        uint256[] calldata nftIds,
-        uint256[] calldata addonIds
-    ) external {
-        for (uint256 i = 0; i < addonIds.length; i++) {
-            removeAddon(nftIds[i], addonIds[i]);
-        }
-    }
-
-    function useMultiple(uint256[] calldata nftIds, uint256[] calldata addonIds)
-        external
-    {
-        require(addonIds.length == nftIds.length, "Should match 1 to 1");
-        for (uint256 i = 0; i < addonIds.length; i++) {
-            useAddon(nftIds[i], addonIds[i]);
-        }
-    }
-
-    function buyMultiple(uint256[] calldata nftIds, uint256[] calldata addonIds)
-        external
-    {
-        require(addonIds.length == nftIds.length, "Should match 1 to 1");
-        for (uint256 i = 0; i < addonIds.length; i++) {
-            useAddon(nftIds[i], addonIds[i]);
-        }
-    }
-
     // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
     function withdraw(uint256 _id, address _to) external onlyOwner {
         addons.safeTransferFrom(address(this), _to, _id, 1, "");

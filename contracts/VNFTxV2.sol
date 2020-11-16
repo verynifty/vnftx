@@ -103,14 +103,12 @@ interface IERC1155 is IERC165Upgradeable {
     ) external;
 }
 
-// import "@nomiclabs/buidler/console.sol";
-
-// @TODO add "health" system basde on a level time progression algorithm.
 contract VNFTxV2 is
     Initializable,
     OwnableUpgradeable,
     ERC1155HolderUpgradeable
 {
+    /* START V1  STORAGE */
     using SafeMathUpgradeable for uint256;
 
     bool paused;
@@ -162,6 +160,8 @@ contract VNFTxV2 is
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _addonId;
 
+    /* END V1 STORAGE */
+
     event BuyAddon(uint256 nftId, uint256 addon, address player);
     event CreateAddon(
         uint256 addonId,
@@ -178,20 +178,30 @@ contract VNFTxV2 is
     event AttachAddon(uint256 addonId, uint256 nftId);
     event RemoveAddon(uint256 addonId, uint256 nftId);
 
-    uint256 public newVar;
-
     constructor() public {}
 
-    // here we test with new contract that adds 2 functions to set a variable
-    function setNewVar(uint256 _new) external {
-        newVar = _new;
+    function initialize(
+        IVNFT _vnft,
+        IMuseToken _muse,
+        IERC1155 _addons
+    ) public initializer {
+        vnft = _vnft;
+        muse = _muse;
+        addons = _addons;
+        paused = false;
+        artistPct = 5;
+        healthGemScore = 100;
+        healthGemId = 1;
+        healthGemPrice = 13 * 10**18;
+        healthGemDays = 1;
+        premiumHp = 90;
+        hpMultiplier = 70;
+        rarityMultiplier = 15;
+        addonsMultiplier = 15;
+        expectedAddons = 10;
+        expectedRarity = 300;
+        OwnableUpgradeable.__Ownable_init();
     }
-
-    function getMix() public view returns (uint256) {
-        return newVar + artistPct;
-    }
-
-    // end test upgrade
 
     modifier tokenOwner(uint256 _id) {
         require(
@@ -239,13 +249,13 @@ contract VNFTxV2 is
         // get # of addons used
         uint256 addonsUsed = addonsBalanceOf(_nftId);
 
-        // maybe give people 7 days chance to start calculation hp?
         if (
-            !vnft.isVnftAlive(_nftId) || daysLived < 7 //not dead || min 7 day of life?
+            !vnft.isVnftAlive(_nftId) //not dead
         ) {
             return 0;
+        } else if (daysLived < 1) {
+            return 70;
         }
-
         // here we get the % they get from score, from rarity, from used and then return based on their multiplier
         uint256 fromScore = currentScore.mul(100).div(expectedScore);
         uint256 fromRarity = rarity[_nftId].mul(100).div(expectedRarity);
@@ -337,8 +347,6 @@ contract VNFTxV2 is
         uint256 _addonID,
         uint256 _toId
     ) external tokenOwner(_nftId) notLocked(_addonID) {
-        // maybe don't let transfer cash addon, or maybe yes as accessory in low supply?
-        require(_addonID != 1, "this addon is instransferible");
         Addon storage _addon = addon[_addonID];
 
         require(
@@ -386,7 +394,6 @@ contract VNFTxV2 is
     function useMultiple(uint256[] calldata nftIds, uint256[] calldata addonIds)
         external
     {
-        require(addonIds.length == nftIds.length, "Should match 1 to 1");
         for (uint256 i = 0; i < addonIds.length; i++) {
             useAddon(nftIds[i], addonIds[i]);
         }
@@ -395,12 +402,12 @@ contract VNFTxV2 is
     function buyMultiple(uint256[] calldata nftIds, uint256[] calldata addonIds)
         external
     {
-        require(addonIds.length == nftIds.length, "Should match 1 to 1");
         for (uint256 i = 0; i < addonIds.length; i++) {
             useAddon(nftIds[i], addonIds[i]);
         }
     }
 
+    // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
     function withdraw(uint256 _id, address _to) external onlyOwner {
         addons.safeTransferFrom(address(this), _to, _id, 1, "");
     }
@@ -512,7 +519,7 @@ contract VNFTxV2 is
         uint256 _days,
         uint256 _hpMultiplier,
         uint256 _rarityMultiplier,
-        uint256 _expectedAddos,
+        uint256 _expectedAddons,
         uint256 _addonsMultiplier,
         uint256 _expectedRarity,
         uint256 _premiumHp
@@ -523,7 +530,7 @@ contract VNFTxV2 is
         healthGemDays = _days;
         hpMultiplier = _hpMultiplier;
         rarityMultiplier = _rarityMultiplier;
-        expectedAddons = _expectedAddos;
+        expectedAddons = _expectedAddons;
         addonsMultiplier = _addonsMultiplier;
         expectedRarity = _expectedRarity;
         premiumHp = _premiumHp;
