@@ -114,7 +114,6 @@ contract VNFTxV3 is
     using SafeMathUpgradeable for uint256;
 
     bool paused;
-    uint256 public total;
 
     IVNFT public vnft;
     IMuseToken public muse;

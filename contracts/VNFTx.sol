@@ -110,7 +110,6 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
     using SafeMathUpgradeable for uint256;
 
     bool paused;
-    uint256 public total;
 
     IVNFT public vnft;
     IMuseToken public muse;
@@ -186,7 +185,6 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         muse = _muse;
         addons = _addons;
         paused = false;
-        total = 1;
         artistPct = 5;
         healthGemScore = 100;
         healthGemId = 1;
@@ -249,11 +247,12 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
 
         // maybe give people 7 days chance to start calculation hp?
         if (
-            !vnft.isVnftAlive(_nftId) || daysLived < 7 //not dead || min 7 day of life?
+            !vnft.isVnftAlive(_nftId) //not dead
         ) {
             return 0;
+        } else if (daysLived < 1) {
+            return 70;
         }
-
         // here we get the % they get from score, from rarity, from used and then return based on their multiplier
         uint256 fromScore = currentScore.mul(100).div(expectedScore);
         uint256 fromRarity = rarity[_nftId].mul(100).div(expectedRarity);
