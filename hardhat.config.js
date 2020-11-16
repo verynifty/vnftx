@@ -4,6 +4,8 @@
 
 require("@nomiclabs/hardhat-ethers");
 require("@openzeppelin/hardhat-upgrades");
+require("@nomiclabs/hardhat-etherscan");
+
 
 //
 // Select the network you want to deploy to here:
@@ -51,10 +53,9 @@ module.exports = {
       },
     },
     mainnet: {
-      url: "https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", //<---- YOUR INFURA ID! (or it won't work)
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      url: "https://mainnet.infura.io/v3/412acf21edf5444a8c9f6bd737cf8ca3",
+      accounts: [],
+      gasPrice: 15000000000,
     },
     ropsten: {
       url: "https://ropsten.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", //<---- YOUR INFURA ID! (or it won't work)
@@ -75,6 +76,10 @@ module.exports = {
         mnemonic: mnemonic(),
       },
     },
+  },
+  etherscan: {
+    apiKey: "XTRMAM5BB3V6MHN8ACDVH2D4D284SVMBNF",
+    url: "https://api.etherscan.io/"
   },
   solidity: "0.6.6",
   settings: {
