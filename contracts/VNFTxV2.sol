@@ -180,29 +180,6 @@ contract VNFTxV2 is
 
     constructor() public {}
 
-    function initialize(
-        IVNFT _vnft,
-        IMuseToken _muse,
-        IERC1155 _addons
-    ) public initializer {
-        vnft = _vnft;
-        muse = _muse;
-        addons = _addons;
-        paused = false;
-        artistPct = 5;
-        healthGemScore = 100;
-        healthGemId = 1;
-        healthGemPrice = 13 * 10**18;
-        healthGemDays = 1;
-        premiumHp = 90;
-        hpMultiplier = 70;
-        rarityMultiplier = 15;
-        addonsMultiplier = 15;
-        expectedAddons = 10;
-        expectedRarity = 300;
-        OwnableUpgradeable.__Ownable_init();
-    }
-
     modifier tokenOwner(uint256 _id) {
         require(
             vnft.ownerOf(_id) == msg.sender,
@@ -262,9 +239,8 @@ contract VNFTxV2 is
         uint256 fromUsed = min(addonsUsed.mul(100).div(expectedAddons), 100);
         uint256 hp = (fromRarity.mul(rarityMultiplier))
             .add(fromScore.mul(hpMultiplier))
-            .add(fromUsed.mul(addonsMultiplier))
+            .add(fromUsed.mul(addonsMultiplier));
            
-
         //return hp
         if (hp > 100) {
             return 100;
