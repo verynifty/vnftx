@@ -242,7 +242,6 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         // get # of addons used
         uint256 addonsUsed = addonsBalanceOf(_nftId);
 
-        // maybe give people 7 days chance to start calculation hp?
         if (
             !vnft.isVnftAlive(_nftId) //not dead
         ) {
