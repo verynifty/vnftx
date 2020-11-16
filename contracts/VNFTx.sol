@@ -103,9 +103,6 @@ interface IERC1155 is IERC165Upgradeable {
     ) external;
 }
 
-// import "@nomiclabs/buidler/console.sol";
-
-// @TODO add "health" system basde on a level time progression algorithm.
 contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
     using SafeMathUpgradeable for uint256;
 
@@ -344,8 +341,6 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         uint256 _addonID,
         uint256 _toId
     ) external tokenOwner(_nftId) notLocked(_addonID) {
-        // maybe don't let transfer cash addon, or maybe yes as accessory in low supply?
-        require(_addonID != 1, "this addon is instransferible");
         Addon storage _addon = addon[_addonID];
 
         require(
@@ -408,6 +403,7 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         }
     }
 
+    // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
     function withdraw(uint256 _id, address _to) external onlyOwner {
         addons.safeTransferFrom(address(this), _to, _id, 1, "");
     }
@@ -519,7 +515,7 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         uint256 _days,
         uint256 _hpMultiplier,
         uint256 _rarityMultiplier,
-        uint256 _expectedAddos,
+        uint256 _expectedAddons,
         uint256 _addonsMultiplier,
         uint256 _expectedRarity,
         uint256 _premiumHp
@@ -530,7 +526,7 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         healthGemDays = _days;
         hpMultiplier = _hpMultiplier;
         rarityMultiplier = _rarityMultiplier;
-        expectedAddons = _expectedAddos;
+        expectedAddons = _expectedAddons;
         addonsMultiplier = _addonsMultiplier;
         expectedRarity = _expectedRarity;
         premiumHp = _premiumHp;
