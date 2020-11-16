@@ -1,7 +1,8 @@
 pragma solidity ^0.6.0;
-import "@openzeppelin/contracts/introspection/IERC165.sol";
 
-interface IStakeForVnfts is IERC165 {
+// import "@openzeppelin/contracts/introspection/IERC165.sol";
+
+interface IStakeForVnfts {
     function stake(uint256 _amount) external;
 
     function redeem() external;

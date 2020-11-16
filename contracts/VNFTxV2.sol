@@ -106,7 +106,7 @@ interface IERC1155 is IERC165 {
 // import "@nomiclabs/buidler/console.sol";
 
 // @TODO add "health" system basde on a level time progression algorithm.
-contract VNFTx is Initializable, OwnableUpgradeSafe {
+contract VNFTxV2 is Initializable, OwnableUpgradeSafe {
     using SafeMath for uint256;
 
     bool paused;
@@ -159,6 +159,8 @@ contract VNFTx is Initializable, OwnableUpgradeSafe {
     using Counters for Counters.Counter;
     Counters.Counter private _addonId;
 
+    uint256 public testAdd;
+
     event BuyAddon(uint256 nftId, uint256 addon, address player);
     event CreateAddon(
         uint256 addonId,
@@ -177,27 +179,18 @@ contract VNFTx is Initializable, OwnableUpgradeSafe {
 
     constructor() public {}
 
-    function initialize(
-        IVNFT _vnft,
-        IMuseToken _muse,
-        IERC1155 _addons
-    ) public initializer {
-        vnft = _vnft;
-        muse = _muse;
-        addons = _addons;
-        paused = false;
-        total = 1;
-        artistPct = 5;
-        healthGemScore = 100;
-        healthGemId = 1;
-        healthGemPrice = 13 * 10**18;
-        healthGemDays = 1;
-        premiumHp = 90;
-        hpMultiplier = 70;
-        rarityMultiplier = 15;
-        addonsMultiplier = 15;
-        expectedAddons = 10;
-        expectedRarity = 300;
+    // for some reason this doesn't work on v2 contract
+    function initialize() public initializer {
+        testAdd = 5;
+    }
+
+    function setNewStore(uint256 _testadd) external {
+        testAdd = _testadd;
+    }
+
+    //here I test adding a new function and using old storage (artistpct) + new storage testAdd
+    function getUpgradeStorage() public view returns (uint256) {
+        return testAdd + artistPct;
     }
 
     modifier tokenOwner(uint256 _id) {

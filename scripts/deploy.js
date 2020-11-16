@@ -16,8 +16,9 @@ async function main() {
   const addons = "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690";
   const VNFTx = await ethers.getContractFactory("VNFTx");
   console.log("Deploying VNFTx...");
-  const vnftx = await upgrades.deployProxy(Vnftx, [vnft, muse, addons], {
-    initializer: "store",
+  const vnftx = await upgrades.deployProxy(VNFTx, [vnft, muse, addons], {
+    // initializer: "store",
+    unsafeAllowCustomTypes: true,
   });
   console.log("VNFTx deployed to:", vnftx.address);
 }

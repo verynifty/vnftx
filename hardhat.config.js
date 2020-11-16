@@ -65,7 +65,7 @@ module.exports = {
       },
     },
   },
-  solidity: "0.6.0",
+  solidity: "0.6.6",
   settings: {
     optimizer: {
       enabled: true,
