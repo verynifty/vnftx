@@ -104,7 +104,7 @@ interface IERC1155 is IERC165Upgradeable {
 }
 
 contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
-    /* START V1 STORAGE */
+    /* START V1  STORAGE */
     using SafeMathUpgradeable for uint256;
 
     bool paused;
