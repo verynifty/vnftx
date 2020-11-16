@@ -4,6 +4,7 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
   const proxyAddress = "0xb7278a61aa25c888815afc32ad3cc52ff24fe575";
 
+  // leaving this as was the tutorial i did, in case questions arise.
   // const BoxV2 = await ethers.getContractFactory("BoxV2");
   // console.log("Preparing upgrade...");
   // const boxV2Address = await upgrades.prepareUpgrade(proxyAddress, BoxV2);

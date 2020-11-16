@@ -8,7 +8,7 @@ require("@openzeppelin/hardhat-upgrades");
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "localhost";
+const defaultNetwork = "hardhat";
 
 function mnemonic() {
   try {
@@ -26,8 +26,19 @@ function mnemonic() {
 module.exports = {
   defaultNetwork,
   networks: {
+    hardhat: {
+      gas: 12000000,
+      blockGasLimit: 0x1fffffffffffff,
+      allowUnlimitedContractSize: true,
+      timeout: 1800000,
+    },
     localhost: {
       url: "http://localhost:8545",
+      gas: 12000000,
+      blockGasLimit: 0x1fffffffffffff,
+      allowUnlimitedContractSize: true,
+      timeout: 1800000,
+
       /*
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
         (you can put in a mnemonic here to set the deployer locally)

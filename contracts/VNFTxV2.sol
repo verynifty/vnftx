@@ -1,16 +1,15 @@
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/introspection/IERC165.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/introspection/IERC165Upgradeable.sol";
 
-import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
 
-// @TODO DOn't Forget!!!
-// import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC1155/ERC1155Holder.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155HolderUpgradeable.sol";
 
-import "@openzeppelin/contracts-ethereum-package/contracts/utils/EnumerableSet.sol";
+import "@openzeppelin/contracts-upgradeable/utils/EnumerableSetUpgradeable.sol";
 
 import "../interfaces/IMuseToken.sol";
 import "../interfaces/IVNFT.sol";
@@ -18,7 +17,7 @@ import "../interfaces/IVNFT.sol";
 // SPDX-License-Identifier: MIT
 
 // Extending IERC1155 with mint and burn
-interface IERC1155 is IERC165 {
+interface IERC1155 is IERC165Upgradeable {
     event TransferSingle(
         address indexed operator,
         address indexed from,
@@ -106,8 +105,8 @@ interface IERC1155 is IERC165 {
 // import "@nomiclabs/buidler/console.sol";
 
 // @TODO add "health" system basde on a level time progression algorithm.
-contract VNFTxV2 is Initializable, OwnableUpgradeSafe {
-    using SafeMath for uint256;
+contract VNFTxV2 is Initializable, OwnableUpgradeable {
+    using SafeMathUpgradeable for uint256;
 
     bool paused;
     uint256 public total;
@@ -129,12 +128,12 @@ contract VNFTxV2 is Initializable, OwnableUpgradeSafe {
         uint256 used;
     }
 
-    using EnumerableSet for EnumerableSet.UintSet;
+    using EnumerableSetUpgradeable for EnumerableSetUpgradeable.UintSet;
 
     mapping(uint256 => Addon) public addon;
 
-    mapping(uint256 => EnumerableSet.UintSet) private addonsConsumed;
-    EnumerableSet.UintSet lockedAddons;
+    mapping(uint256 => EnumerableSetUpgradeable.UintSet) private addonsConsumed;
+    EnumerableSetUpgradeable.UintSet lockedAddons;
 
     //nftid to rarity points
     mapping(uint256 => uint256) public rarity;
@@ -156,8 +155,8 @@ contract VNFTxV2 is Initializable, OwnableUpgradeSafe {
     //Expected rarity, this should be changed according to new addons introduced.
     uint256 expectedRarity;
 
-    using Counters for Counters.Counter;
-    Counters.Counter private _addonId;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    CountersUpgradeable.Counter private _addonId;
 
     uint256 public testAdd;
 
