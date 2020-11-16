@@ -104,6 +104,7 @@ interface IERC1155 is IERC165Upgradeable {
 }
 
 contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
+    /* START V1 STORAGE */
     using SafeMathUpgradeable for uint256;
 
     bool paused;
@@ -154,6 +155,8 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
 
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _addonId;
+
+    /* END V1 STORAGE */
 
     event BuyAddon(uint256 nftId, uint256 addon, address player);
     event CreateAddon(
