@@ -25,7 +25,7 @@ async function main() {
     VNFTx,
     [VNFT.address, MuseToken.address, NiftyAddons.address],
     {
-      // initializer: "store",
+      initializer: "initialize",
       unsafeAllowCustomTypes: true,
     }
   );
@@ -197,7 +197,6 @@ async function main() {
   console.log("transfered lock", transferLocked);
 }
 
-// copied this from old repo
 async function deploy(name, _args) {
   const args = _args || [];
 

@@ -8,6 +8,8 @@
     "test": "hardhat test --network hardhatevm",
     "compile": "hardhat compile",
     "deploy": "hardhat run ./scripts/deploy.js",
+    "prepare": "hardhat run ./scripts/prepare-upgrade.js",
+    "upgrade": "hardhat run ./scripts/upgrade.js",
     "console": "hardhat console"
   },
   "keywords": [],

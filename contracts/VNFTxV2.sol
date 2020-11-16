@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
 
+// @TODO DOn't Forget!!!
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155HolderUpgradeable.sol";
 
 import "@openzeppelin/contracts-upgradeable/utils/EnumerableSetUpgradeable.sol";
@@ -162,8 +163,6 @@ contract VNFTxV2 is
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _addonId;
 
-    uint256 public testAdd;
-
     event BuyAddon(uint256 nftId, uint256 addon, address player);
     event CreateAddon(
         uint256 addonId,
@@ -180,21 +179,21 @@ contract VNFTxV2 is
     event AttachAddon(uint256 addonId, uint256 nftId);
     event RemoveAddon(uint256 addonId, uint256 nftId);
 
+    uint256 public newVar;
+
     constructor() public {}
 
-    // for some reason this doesn't work on v2 contract
     function initialize() public initializer {
-        testAdd = 5;
         OwnableUpgradeable.__Ownable_init();
+        newVar = 10;
     }
 
-    function setNewStore(uint256 _testadd) external {
-        testAdd = _testadd;
+    function setNewVar(uint256 _new) external {
+        newVar = _new;
     }
 
-    //here I test adding a new function and using old storage (artistpct) + new storage testAdd
-    function getUpgradeStorage() public view returns (uint256) {
-        return testAdd + artistPct;
+    function getMix() public view returns (uint256) {
+        return newVar + artistPct;
     }
 
     modifier tokenOwner(uint256 _id) {

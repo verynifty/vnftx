@@ -8,7 +8,7 @@ require("@openzeppelin/hardhat-upgrades");
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "hardhat";
+const defaultNetwork = "localhost";
 
 function mnemonic() {
   try {

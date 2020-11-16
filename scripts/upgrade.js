@@ -14,7 +14,7 @@ async function main() {
 
   const VNFTxV2 = await ethers.getContractFactory("VNFTxV2");
   const vnftx = await upgrades.upgradeProxy(
-    "0xb7278a61aa25c888815afc32ad3cc52ff24fe575", //proxy aka original deployement
+    "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", //proxy aka original deployement
     VNFTxV2,
     { unsafeAllowCustomTypes: true }
   );
