@@ -231,7 +231,7 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         return addonsConsumed[_nftId].at(_index);
     }
 
-    function getHp(uint256 _nftId) public view returns (uint256) {
+     function getHp(uint256 _nftId) public view returns (uint256) {
         // A vnft need to get at least x score every two days to be healthy
         uint256 currentScore = vnft.vnftScore(_nftId);
         uint256 timeBorn = vnft.timeVnftBorn(_nftId);
@@ -252,20 +252,19 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         } else if (daysLived < 1) {
             return 70;
         }
-        // here we get the % they get from score, from rarity, from used and then return based on their multiplier
-        uint256 fromScore = currentScore.mul(100).div(expectedScore);
-        uint256 fromRarity = rarity[_nftId].mul(100).div(expectedRarity);
-        uint256 fromUsed = addonsUsed.mul(100).div(expectedAddons);
+         // here we get the % they get from score, from rarity, from used and then return based on their multiplier
+        uint256 fromScore = min(currentScore.mul(100).div(expectedScore), 100);
+        uint256 fromRarity = min(rarity[_nftId].mul(100).div(expectedRarity), 100);
+        uint256 fromUsed = min(addonsUsed.mul(100).div(expectedAddons), 100);
         uint256 hp = (fromRarity.mul(rarityMultiplier))
             .add(fromScore.mul(hpMultiplier))
-            .add(fromUsed.mul(addonsMultiplier))
-            .div(100);
-
+            .add(fromUsed.mul(addonsMultiplier));
+           
         //return hp
         if (hp > 100) {
             return 100;
         } else {
-            return hp;
+            return hp.div(100);
         }
     }
 
@@ -509,5 +508,9 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
 
     function pause(bool _paused) public onlyOwner {
         paused = _paused;
+    }
+
+    function min(uint256 a, uint256 b) private pure returns (uint256) {
+        return a < b ? a : b;
     }
 }

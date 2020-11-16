@@ -10,6 +10,19 @@ const chalk = require("chalk");
 const fs = require("fs");
 async function main() {
 
+    const VNFTx = await ethers.getContractFactory("VNFTx");
+    console.log("Deploying VNFTx...");
+    const vnftx = await upgrades.deployProxy(
+      VNFTx,
+      [VNFT_CONTRACT, MUSE_TOKEN, ACCESSORY],
+      {
+        initializer: "initialize",
+        unsafeAllowCustomTypes: true,
+      }
+    );
+    console.log("VNFTx deployed to:", vnftx.address);
+
+    /*
     VNFTxV2 = await ethers.getContractFactory("VNFTxV2");
     console.log("Preparing upgrade...");
     vnftxV2Address = await upgrades.prepareUpgrade(proxy, VNFTxV2, {
@@ -21,7 +34,7 @@ async function main() {
         VNFTxV2,
         { unsafeAllowCustomTypes: true }
     );
-
+        */
 }
 
 async function deploy(name, _args) {
