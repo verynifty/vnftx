@@ -1125,9 +1125,9 @@
         }
       }
     },
-    "8c767d5bc7860e1c9a4a3bbcae8f778330b142ab90b0b0f5ab8db37e9726ee5e": {
+    "343b576e3dfc36279c8a70b5cf8d1f1226658a31ca732844c50b505436651564": {
       "address": "0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf",
-      "txHash": "0xd5f64dbdf0da35ece6f0d4f205c950a79f2fbb3d1a70e8f34108c0fe977b9fc7",
+      "txHash": "0x8f496dd93d0733405570ed5e2ee9c880aae89d11d647b4be417f4c87eee68687",
       "layout": {
         "storage": [
           {
@@ -1199,13 +1199,13 @@
           {
             "contract": "VNFTxV2",
             "label": "vnft",
-            "type": "t_contract(IVNFT)2848",
+            "type": "t_contract(IVNFT)2833",
             "src": "contracts/VNFTxV2.sol:119"
           },
           {
             "contract": "VNFTxV2",
             "label": "muse",
-            "type": "t_contract(IMuseToken)2683",
+            "type": "t_contract(IMuseToken)2668",
             "src": "contracts/VNFTxV2.sol:120"
           },
           {
@@ -1330,10 +1330,10 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_contract(IVNFT)2848": {
+          "t_contract(IVNFT)2833": {
             "label": "contract IVNFT"
           },
-          "t_contract(IMuseToken)2683": {
+          "t_contract(IMuseToken)2668": {
             "label": "contract IMuseToken"
           },
           "t_contract(IERC1155)1302": {

@@ -183,11 +183,7 @@ contract VNFTxV2 is
 
     constructor() public {}
 
-    function initialize() public initializer {
-        OwnableUpgradeable.__Ownable_init();
-        newVar = 10;
-    }
-
+    // here we test with new contract that adds 2 functions to set a variable
     function setNewVar(uint256 _new) external {
         newVar = _new;
     }
@@ -195,6 +191,8 @@ contract VNFTxV2 is
     function getMix() public view returns (uint256) {
         return newVar + artistPct;
     }
+
+    // end test upgrade
 
     modifier tokenOwner(uint256 _id) {
         require(
