@@ -906,9 +906,9 @@
         }
       }
     },
-    "3d47337e9da21818d1aa8970a9eeb85c0ccca238831cbf699718872cfe1dcf5a": {
+    "b563c990db95d7c08f62905fbd1824d77b3cd452c82860dce052960eb18d35dc": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0xc5610615e5cc9918213c4f931652f328fe6f1a2010083a1e0d10f4ba67d190f5",
+      "txHash": "0x2b7ec5a42515b6cdecf954bd39b87395d6d5e18878c6413f3ebd20914073187a",
       "layout": {
         "storage": [
           {
@@ -942,6 +942,30 @@
             "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
           },
           {
+            "contract": "ERC165Upgradeable",
+            "label": "_supportedInterfaces",
+            "type": "t_mapping(t_bytes4,t_bool)",
+            "src": "@openzeppelin/contracts-upgradeable/introspection/ERC165Upgradeable.sol:23"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/introspection/ERC165Upgradeable.sol:59"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155ReceiverUpgradeable.sol:24"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155HolderUpgradeable.sol:27"
+          },
+          {
             "contract": "VNFTx",
             "label": "paused",
             "type": "t_bool",
@@ -956,13 +980,13 @@
           {
             "contract": "VNFTx",
             "label": "vnft",
-            "type": "t_contract(IVNFT)2889",
+            "type": "t_contract(IVNFT)4363",
             "src": "contracts/VNFTx.sol:115"
           },
           {
             "contract": "VNFTx",
             "label": "muse",
-            "type": "t_contract(IMuseToken)2724",
+            "type": "t_contract(IMuseToken)4198",
             "src": "contracts/VNFTx.sol:116"
           },
           {
@@ -980,7 +1004,7 @@
           {
             "contract": "VNFTx",
             "label": "addon",
-            "type": "t_mapping(t_uint256,t_struct(Addon)1338_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Addon)1340_storage)",
             "src": "contracts/VNFTx.sol:134"
           },
           {
@@ -1081,16 +1105,16 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_contract(IVNFT)2889": {
+          "t_contract(IVNFT)4363": {
             "label": "contract IVNFT"
           },
-          "t_contract(IMuseToken)2724": {
+          "t_contract(IMuseToken)4198": {
             "label": "contract IMuseToken"
           },
           "t_contract(IERC1155)1302": {
             "label": "contract IERC1155"
           },
-          "t_mapping(t_uint256,t_struct(Addon)1338_storage)": {
+          "t_mapping(t_uint256,t_struct(Addon)1340_storage)": {
             "label": "mapping(uint256 => struct VNFTx.Addon)"
           },
           "t_mapping(t_uint256,t_struct(UintSet)1044_storage)": {
@@ -1105,14 +1129,17 @@
           "t_struct(Counter)704_storage": {
             "label": "struct CountersUpgradeable.Counter"
           },
-          "t_address": {
-            "label": "address"
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_mapping(t_bytes4,t_bool)": {
+            "label": "mapping(bytes4 => bool)"
           },
           "t_array(t_uint256)49_storage": {
             "label": "uint256[49]"
           },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]"
+          "t_address": {
+            "label": "address"
           }
         }
       }

@@ -106,7 +106,7 @@ interface IERC1155 is IERC165Upgradeable {
 // import "@nomiclabs/buidler/console.sol";
 
 // @TODO add "health" system basde on a level time progression algorithm.
-contract VNFTx is Initializable, OwnableUpgradeable {
+contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
     using SafeMathUpgradeable for uint256;
 
     bool paused;
@@ -198,6 +198,7 @@ contract VNFTx is Initializable, OwnableUpgradeable {
         addonsMultiplier = 15;
         expectedAddons = 10;
         expectedRarity = 300;
+        OwnableUpgradeable.__Ownable_init();
     }
 
     modifier tokenOwner(uint256 _id) {

@@ -8,9 +8,7 @@
 
 ## To Deploy
 
-1. Run npm run chain
-1. Deploy Muse, VNFT and Addons from the other project
-1. Paste the addresses in `./script/deploy.js`
+1. Run `npm run chain`
 1. run `npm run deploy`
 1. Get the contract address and paste it in `proxyAddress` on `./scripts/prepare-upgrade.js` and `./scripts/upgrade.js`
 1. run `npx hardhat run ./scripts/prepare-upgrade.js && npx hardhat run ./scripts/upgrade.js`

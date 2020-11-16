@@ -13,6 +13,7 @@ async function main() {
   const VNFTxV2 = await ethers.getContractFactory("VNFTxV2");
   console.log("Preparing upgrade...");
   const vnftxV2Address = await upgrades.prepareUpgrade(proxyAddress, VNFTxV2, {
+    initializer: "initialize",
     unsafeAllowCustomTypes: true,
   });
   console.log("VNFTxV2 at:", vnftxV2Address);

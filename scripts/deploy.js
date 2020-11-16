@@ -138,7 +138,7 @@ async function main() {
     20,
     100,
     "RektMeRev",
-    VNFTx.address,
+    vnftx.address,
     100,
     false
   );
