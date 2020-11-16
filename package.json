@@ -10,6 +10,7 @@
     "deploy": "hardhat run ./scripts/deploy.js",
     "prepare": "hardhat run ./scripts/prepare-upgrade.js",
     "upgrade": "hardhat run ./scripts/upgrade.js",
+    "testupgradevar": "hardhat run ./scripts/testUpgradeWithVar.js",
     "console": "hardhat console"
   },
   "keywords": [],
