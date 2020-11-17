@@ -6,7 +6,6 @@ require("@nomiclabs/hardhat-ethers");
 require("@openzeppelin/hardhat-upgrades");
 require("@nomiclabs/hardhat-etherscan");
 
-
 //
 // Select the network you want to deploy to here:
 //
@@ -79,9 +78,9 @@ module.exports = {
   },
   etherscan: {
     apiKey: "XTRMAM5BB3V6MHN8ACDVH2D4D284SVMBNF",
-    url: "https://api.etherscan.io/"
+    url: "https://api.etherscan.io/",
   },
-  solidity: "0.6.6",
+  solidity: "0.6.8",
   settings: {
     optimizer: {
       enabled: true,
