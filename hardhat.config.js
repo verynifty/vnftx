@@ -81,10 +81,10 @@ module.exports = {
     url: "https://api.etherscan.io/",
   },
   solidity: "0.6.8",
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 200,
-    },
-  },
+  // settings: {
+  //   optimizer: {
+  //     enabled: false,
+  //     // runs: 200,
+  //   },
+  // },
 };
