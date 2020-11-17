@@ -3,12 +3,13 @@
 const ACCESSORY = "0x47F42e4d4dE7EBF20d582e57ecd88ff64B2d7910";
 MUSE_TOKEN = "0xB6Ca7399B4F9CA56FC27cBfF44F4d2e4Eef1fc81";
 VNFT_CONTRACT = "0x57f0B53926dd62f2E26bc40B30140AbEA474DA94";
-const proxy = "0x23069ab3b6d8513777a97c2e91d470b88b716fd7";
+const proxy = "0x14d4D06B8e8df9B85A37D622aA95784a4FCcB130";
 
 const { ethers, upgrades } = require("hardhat");
 const chalk = require("chalk");
 const fs = require("fs");
 async function main() {
+  /*
   const VNFTx = await ethers.getContractFactory("VNFTx");
   console.log("Deploying VNFTx...");
   const vnftx = await upgrades.deployProxy(
@@ -20,8 +21,8 @@ async function main() {
     }
   );
   console.log("VNFTx deployed to:", vnftx.address);
-
-  /*
+*/
+  
     VNFTxV2 = await ethers.getContractFactory("VNFTxV2");
     console.log("Preparing upgrade...");
     vnftxV2Address = await upgrades.prepareUpgrade(proxy, VNFTxV2, {
@@ -33,7 +34,7 @@ async function main() {
         VNFTxV2,
         { unsafeAllowCustomTypes: true }
     );
-        */
+        
 }
 
 async function deploy(name, _args) {
