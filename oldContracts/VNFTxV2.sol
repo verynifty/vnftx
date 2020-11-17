@@ -240,13 +240,7 @@ contract VNFTxV2 is
         uint256 hp = (fromRarity.mul(rarityMultiplier))
             .add(fromScore.mul(hpMultiplier))
             .add(fromUsed.mul(addonsMultiplier));
-           
-        //return hp
-        if (hp > 100) {
-            return 100;
-        } else {
-            return hp.div(100);
-        }
+        return min(hp.div(100), 100);
     }
 
     function getChallenges(uint256 _nftId) public view returns (uint256) {
