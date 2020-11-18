@@ -3,3 +3,6 @@
 
 # dependencies
 /node_modules
+
+/contracts/Moony.sol
+/contracts/Moony20.sol
