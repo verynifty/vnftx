@@ -59,7 +59,7 @@ contract TokenizeNFT is Ownable, ERC20PresetMinterPauser {
         uint256 index = 0;
         while (index < _times) {
             vnft.buyAccesory(currentVNFT, defaultGem);
-            _times = _times + 1;
+            index = index + 1;
         }
         if (lastTimeMined + 1 days < now) {
             vnft.claimMiningRewards(currentVNFT);
@@ -69,7 +69,7 @@ contract TokenizeNFT is Ownable, ERC20PresetMinterPauser {
     }
 
     function getMuseValue(uint256 _quantity) public view returns (uint256) {
-        uint256 reward = totalSupply().div(_quantity); // Need to put in percent and send make it to muse balance of this
+        uint256 reward = totalSupply().div(_quantity);
         return reward;
     }
 
@@ -86,6 +86,9 @@ contract TokenizeNFT is Ownable, ERC20PresetMinterPauser {
     function remove(address _to, uint256 _quantity) public {
         _burn(msg.sender, _quantity);
         muse.transfer(_to, getMuseValue(_quantity));
+        if (totalSupply() == 0 && vnft.isVnftAlive(currentVNFT)) {
+            vnft.safeTransferFrom(address(this), msg.sender, currentVNFT);
+        }
     }
 
     function max(uint256 a, uint256 b) private pure returns (uint256) {
