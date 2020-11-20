@@ -1,11 +1,11 @@
-pragma solidity ^0.6.0;
+/*pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol";
-import "./interfaces/IMuseToken.sol";
-import "./interfaces/IVNFT.sol";
+import "../interfaces/IMuseToken.sol";
+import "../interfaces/IVNFT.sol";
 
 // SPDX-License-Identifier: MIT
 
@@ -79,7 +79,7 @@ contract TokenizeNFT is Ownable, ERC20PresetMinterPauser {
         {
             return 1 * _times * 1 ether;
         } else {
-            return ((totalDays - daysStarted) * )  
+            return ((totalDays - daysStarted) * 1 ether * _times);
         }
     }
 
@@ -94,4 +94,4 @@ contract TokenizeNFT is Ownable, ERC20PresetMinterPauser {
     function max(uint256 a, uint256 b) private pure returns (uint256) {
         return a > b ? a : b;
     }
-}
+}*/

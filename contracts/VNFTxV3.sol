@@ -264,7 +264,7 @@ contract VNFTxV2 is
         );
         require(
             // @TODO double check < or <=
-            _addon.used < addons.balanceOf(address(this), addonId),
+            _addon.used < _addon.quantity,
             "Addon not available"
         );
 
@@ -301,8 +301,6 @@ contract VNFTxV2 is
             getHp(_nftId) >= _addon.requiredhp,
             "Raise your HP to use this addon"
         );
-
-        _addon.used = _addon.used.add(1);
 
         addonsConsumed[_nftId].add(_addonID);
 
