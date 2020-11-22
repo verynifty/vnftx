@@ -292,7 +292,7 @@ contract VNFTx is Initializable, OwnableUpgradeable, ERC1155HolderUpgradeable {
         );
         require(
             // @TODO double check < or <=
-            _addon.used < addons.quantity,
+            _addon.used < _addon.quantity,
             "Addon not available"
         );
 

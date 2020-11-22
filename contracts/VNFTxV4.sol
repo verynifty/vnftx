@@ -103,7 +103,7 @@ interface IERC1155 is IERC165Upgradeable {
     ) external;
 }
 
-contract VNFTxV3 is
+contract VNFTxV4 is
     Initializable,
     OwnableUpgradeable,
     ERC1155HolderUpgradeable
@@ -377,6 +377,34 @@ contract VNFTxV3 is
         for (uint256 i = 0; i < addonIds.length; i++) {
             useAddon(nftIds[i], addonIds[i]);
         }
+    }
+
+    // kill them all
+    function battle(uint256 _nftId, uint256 _opponent)
+        public
+        tokenOwner(_nftId)
+    {
+        // require x challenges and x hp or xx rarity for battles
+        require(
+            getChallenges(_nftId) >= 1 &&
+                rarity[_nftId] >= 100 && //buy cb
+                getHp(_nftId) >= 60, //decide
+            "can't challenge"
+        );
+
+        // require opponent to be of certain threshold 30?
+        require(getHp(_opponent) <= 30, "You can't attack this pet");
+
+        // challenge used.
+        challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
+
+        // decrease something, maybe rarity or something that will lower the opponents hp;
+        rarity[_opponent] = rarity[_opponent].sub(100);
+
+        // burn him. hmmm
+        // _burn(_opponent);
+        // send muse to attacker based on condition, maybe level of opponent
+        muse.mint(msg.sender, 10 ether);
     }
 
     // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
