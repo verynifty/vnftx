@@ -444,6 +444,37 @@ contract VNFTxV4 is
         emit CreateAddon(newAddonId, _type, _rarity, _quantity);
     }
 
+    function createAddonAndSend(
+        string calldata _type,
+        uint256 _hp,
+        uint256 _rarity,
+        string calldata _artistName,
+        address _artist,
+        uint256 _quantity,
+        bool _lock
+    ) external onlyOwner {
+        _addonId.increment();
+        uint256 newAddonId = _addonId.current();
+
+        addon[newAddonId] = Addon(
+            _type,
+            0,
+            _hp,
+            _rarity,
+            _artistName,
+            _artist,
+            _quantity,
+            _quantity //used must be set as quantity to avoid people trying to buy
+        );
+        addons.mint(address(msg.sender), newAddonId, _quantity, "");
+
+        if (_lock) {
+            lockAddon(newAddonId);
+        }
+
+        emit CreateAddon(newAddonId, _type, _rarity, _quantity);
+    }
+
     function getVnftInfo(uint256 _nftId)
         public
         view
