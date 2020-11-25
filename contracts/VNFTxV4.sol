@@ -416,7 +416,7 @@ contract VNFTxV4 is
     mapping(address => uint256) public toReceiveCashback;
     uint256 cashbackPct = 40;
 
-    function cashback(uint256 _nftId) external {
+    function cashback(uint256 _nftId) external tokenOwner(_nftId) {
         // own cahabck addon
         require(addonsConsumed[_nftId].contains(1), "You need cashback addon");
         //    have premium hp
