@@ -383,11 +383,13 @@ contract VNFTxV4 is
 
     mapping(uint256 => uint256) public hpLostOnBattle;
     mapping(uint256 => uint256) public timesAttacked;
+    uint256 public randomBlockSize = 3;
 
     function battle(uint256 _nftId, uint256 _opponent)
         public
         tokenOwner(_nftId)
     {
+        require(_nftId != _opponent, "Can't attack yourself");
         // change id to battles accessory
         require(addonsConsumed[_nftId].contains(4), "You need battles addon");
 
@@ -407,10 +409,50 @@ contract VNFTxV4 is
         challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
         timesAttacked[_opponent] = timesAttacked[_opponent].add(1);
 
-        if (getHp(_opponent) >= 5) {
-            hpLostOnBattle[_opponent] = hpLostOnBattle[_opponent].add(5);
+        //decide winner
+        uint256 winner;
+        if (randomNumber(0, 100) < 70) {
+            winner = _nftId;
+        } else {
+            winner = _opponent;
         }
-        muse.mint(msg.sender, 5 ether);
+
+        // then do all calcs based on winner, could be opponent or nftid
+        if (getHp(winner) < 20 || getHp(winner) == 5) {
+            // halp! need this to make hp be 0
+            hpLostOnBattle[winner] = getHp(winner).add(hpLostOnBattle[winner]);
+        } else if (getHp(winner) >= 20) {
+            // reomove 5hp
+            hpLostOnBattle[winner] = hpLostOnBattle[winner].add(5);
+        }
+
+        // get 15% of level in muse
+        uint256 museWon = vnft.level(winner).mul(15).div(100);
+        if (museWon < 4) {
+            museWon = 3;
+        }
+        muse.mint(vnft.ownerOf(winner), museWon * 10**18);
+    }
+
+    /* generates a number from 0 to 2^n based on the last n blocks */
+    function randomNumber(uint256 seed, uint256 max)
+        public
+        view
+        returns (uint256 _randomNumber)
+    {
+        uint256 n = 0;
+        for (uint256 i = 0; i < randomBlockSize; i++) {
+            if (
+                uint256(
+                    keccak256(
+                        abi.encodePacked(blockhash(block.number - i - 1), seed)
+                    )
+                ) %
+                    2 ==
+                0
+            ) n += 2**i;
+        }
+        return n % max;
     }
 
     mapping(address => uint256) public toReceiveCashback;
