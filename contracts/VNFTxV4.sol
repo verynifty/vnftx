@@ -243,7 +243,7 @@ contract VNFTxV4 is
         uint256 hp = (fromRarity.mul(rarityMultiplier))
             .add(fromScore.mul(hpMultiplier))
             .add(fromUsed.mul(addonsMultiplier));
-        return min(hp.div(100), 100);
+        return min(hp.div(100), 100).sub(hpLostOnBattle[_nftId]);
     }
 
     function getChallenges(uint256 _nftId) public view returns (uint256) {
@@ -379,32 +379,39 @@ contract VNFTxV4 is
         }
     }
 
-    // // kill them all
-    // function battle(uint256 _nftId, uint256 _opponent)
-    //     public
-    //     tokenOwner(_nftId)
-    // {
-    //     // require x challenges and x hp or xx rarity for battles
-    //     require(
-    //         getChallenges(_nftId) >= 1 &&
-    //             rarity[_nftId] >= 100 && //buy cb
-    //             getHp(_nftId) >= 60, //decide
-    //         "can't challenge"
-    //     );
+    // kill them all
 
-    //     // require opponent to be of certain threshold 30?
-    //     require(getHp(_opponent) <= 30, "You can't attack this pet");
+    mapping(uint256 => uint256) public hpLostOnBattle;
+    mapping(uint256 => uint256) public timesAttacked;
 
-    //     challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
+    function battle(uint256 _nftId, uint256 _opponent)
+        public
+        tokenOwner(_nftId)
+    {
+        // change id to battles accessory
+        require(addonsConsumed[_nftId].contains(4), "You need battles addon");
 
-    //     // decrease something, maybe rarity or something that will lower the opponents hp;
-    //     rarity[_opponent] = rarity[_opponent].sub(100);
+        // require x challenges and x hp or xx rarity for battles
+        require(
+            getChallenges(_nftId) >= 1 && getHp(_nftId) >= 70, //decide
+            "can't challenge"
+        );
 
-    //     // burn him. hmmm
-    //     // _burn(_opponent);
-    //     // send muse to attacker based on condition, maybe level of opponent
-    //     muse.mint(msg.sender, 10 ether);
-    // }
+        require(
+            timesAttacked[_opponent] <= 10,
+            "This pet was attacked 10 times already"
+        );
+        // require opponent to be of certain threshold 30?
+        require(getHp(_opponent) <= 50, "You can't attack this pet");
+
+        challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
+        timesAttacked[_opponent] = timesAttacked[_opponent].add(1);
+
+        if (getHp(_opponent) >= 5) {
+            hpLostOnBattle[_opponent] = hpLostOnBattle[_opponent].add(5);
+        }
+        muse.mint(msg.sender, 5 ether);
+    }
 
     mapping(address => uint256) public toReceiveCashback;
     uint256 cashbackPct = 40;
