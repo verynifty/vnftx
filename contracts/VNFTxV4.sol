@@ -379,32 +379,63 @@ contract VNFTxV4 is
         }
     }
 
-    // kill them all
-    function battle(uint256 _nftId, uint256 _opponent)
-        public
-        tokenOwner(_nftId)
-    {
-        // require x challenges and x hp or xx rarity for battles
+    // // kill them all
+    // function battle(uint256 _nftId, uint256 _opponent)
+    //     public
+    //     tokenOwner(_nftId)
+    // {
+    //     // require x challenges and x hp or xx rarity for battles
+    //     require(
+    //         getChallenges(_nftId) >= 1 &&
+    //             rarity[_nftId] >= 100 && //buy cb
+    //             getHp(_nftId) >= 60, //decide
+    //         "can't challenge"
+    //     );
+
+    //     // require opponent to be of certain threshold 30?
+    //     require(getHp(_opponent) <= 30, "You can't attack this pet");
+
+    //     challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
+
+    //     // decrease something, maybe rarity or something that will lower the opponents hp;
+    //     rarity[_opponent] = rarity[_opponent].sub(100);
+
+    //     // burn him. hmmm
+    //     // _burn(_opponent);
+    //     // send muse to attacker based on condition, maybe level of opponent
+    //     muse.mint(msg.sender, 10 ether);
+    // }
+
+    mapping(address => uint256) public toReceiveCashback;
+    uint256 cashbackPct = 40;
+
+    function cashback(uint256 _nftId) external {
+        // own cahabck addon
+        require(addonsConsumed[_nftId].contains(1), "You need cashback addon");
+        //    have premium hp
+        require(getHp(_nftId) >= premiumHp, "Raise your hp to claim cashback");
+        // didn't get cashback in last 7 days
         require(
-            getChallenges(_nftId) >= 1 &&
-                rarity[_nftId] >= 100 && //buy cb
-                getHp(_nftId) >= 60, //decide
-            "can't challenge"
+            toReceiveCashback[msg.sender] >= block.timestamp ||
+                toReceiveCashback[msg.sender] == 0,
+            "You can't claim cahsback yet"
         );
 
-        // require opponent to be of certain threshold 30?
-        require(getHp(_opponent) <= 30, "You can't attack this pet");
+        toReceiveCashback[msg.sender] = block.timestamp.add(7 days);
 
-        // challenge used.
-        challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
+        uint256 currentScore = vnft.vnftScore(_nftId);
+        uint256 timeBorn = vnft.timeVnftBorn(_nftId);
+        uint256 daysLived = (now.sub(timeBorn)).div(1 days);
 
-        // decrease something, maybe rarity or something that will lower the opponents hp;
-        rarity[_opponent] = rarity[_opponent].sub(100);
+        uint256 expectedScore = daysLived.mul(
+            healthGemScore.div(healthGemDays)
+        );
 
-        // burn him. hmmm
-        // _burn(_opponent);
-        // send muse to attacker based on condition, maybe level of opponent
-        muse.mint(msg.sender, 10 ether);
+        uint256 fromScore = min(currentScore.mul(100).div(expectedScore), 100);
+        uint256 museSpent = healthGemPrice.mul(7).mul(fromScore).div(100);
+        uint256 cashbackAmt = museSpent.mul(cashbackPct).div(100);
+
+        muse.mint(msg.sender, cashbackAmt);
     }
 
     // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
