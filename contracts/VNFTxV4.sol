@@ -425,6 +425,8 @@ contract VNFTxV4 is
     {
         uint256 oponentHp = getHp(_oponent);
         uint256 attackerHp = getHp(_nftId);
+
+        require(vnft.ownerOf(_opponent) !== msg.sender, "Can't atack yourself");
         require(_nftId != _opponent, "Can't attack yourself");
 
         // TODO change id to battles accessory
