@@ -1,6 +1,8 @@
 // scripts/deploy.js
 const { ethers, upgrades } = require("hardhat");
 const chalk = require("chalk");
+const BigNumber = require("bignumber.js");
+
 const fs = require("fs");
 async function main() {
   // this is to test based on tutorial in case
@@ -19,7 +21,7 @@ async function main() {
 
   const VNFT = await deploy("VNFT", [MuseToken.address]);
 
-  const VNFTx = await ethers.getContractFactory("VNFTx");
+  const VNFTx = await ethers.getContractFactory("VNFTxV4");
   console.log("Deploying VNFTx...");
   const vnftx = await upgrades.deployProxy(
     VNFTx,
@@ -40,6 +42,13 @@ async function main() {
   );
   console.log("🚀 Granted MuseToken Minter Role to VNFT \n");
 
+  // grant miner role to VNFT
+  await MuseToken.grantRole(
+    "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6",
+    vnftx.address
+  );
+  console.log("🚀 Granted MuseToken Minter Role to VNFTx \n");
+
   // mint to other user to test erc1155 works
 
   await MuseToken.mint(
@@ -57,6 +66,7 @@ async function main() {
   console.log("🚀 added item diamond \n");
 
   await VNFT.mint("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266");
+  await VNFT.mint("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266");
   console.log("🚀 Minted one vNFT to for test \n");
 
   await MuseToken.approve(VNFT.address, "100000000000000000000000000000000000");
@@ -64,37 +74,60 @@ async function main() {
   // start 9 days of mining and claiming
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+
   await VNFT.buyAccesory(0, 1);
+  await VNFT.buyAccesory(1, 1);
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+
+  await VNFT.buyAccesory(0, 1);
+  await VNFT.buyAccesory(1, 1);
+
+  await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
+  await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+  await VNFT.buyAccesory(1, 1);
   await VNFT.buyAccesory(0, 1);
 
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+
   await VNFT.buyAccesory(0, 1);
+  await VNFT.buyAccesory(1, 1);
 
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+
   await VNFT.buyAccesory(0, 1);
+  await VNFT.buyAccesory(1, 1);
 
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+
   await VNFT.buyAccesory(0, 1);
+  await VNFT.buyAccesory(1, 1);
 
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
+
   await VNFT.buyAccesory(0, 1);
+  await VNFT.buyAccesory(1, 1);
 
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
-  await VNFT.buyAccesory(0, 1);
+  await VNFT.claimMiningRewards(1);
 
-  await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
-  await VNFT.claimMiningRewards(0);
   // await VNFT.buyAccesory(0, 1);
 
   await ethers.provider.send("evm_increaseTime", [60 * 60 * 24 + 2]); // add 1day
   await VNFT.claimMiningRewards(0);
+  await VNFT.claimMiningRewards(1);
   let hp = await vnftx.getHp(0);
   let rarity = await vnftx.rarity(0);
 
@@ -180,21 +213,62 @@ async function main() {
   await vnftx.buyAddon(0, 4);
   await vnftx.buyAddon(0, 5);
 
-  rarity = await vnftx.rarity(0);
-  console.log("rarity: ", rarity.toString());
+  await vnftx.buyAddon(1, 1);
+  await vnftx.buyAddon(1, 2);
+  await vnftx.buyAddon(1, 3);
+  await vnftx.buyAddon(1, 4);
+  await vnftx.buyAddon(1, 5);
+
+  // rarity = await vnftx.rarity(0);
+  // console.log("rarity of #0: ", rarity.toString());
+  // console.log("rarity of #1: ", rarity.toString());
 
   hp = await vnftx.getHp(0);
-  console.log("hp: ", hp.toString());
+  console.log("hp of #0: ", hp.toString());
 
-  // test unlocked addon
-  let transferLocked = await vnftx.removeAddon(0, 2);
+  hp = await vnftx.getHp(1);
+  console.log("hp of #1: ", hp.toString());
 
-  console.log("transfered unlocked", transferLocked);
+  // test battle
 
-  // test locked addon
-  transferLocked = await vnftx.removeAddon(0, 1);
+  let muse = await MuseToken.balanceOf(
+    "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+  );
 
-  console.log("transfered lock", transferLocked);
+  let museBalance = new BigNumber(parseInt(muse))
+    .shiftedBy(-parseInt(18))
+    .toFixed(4, 1);
+
+  console.log("muse balance before battle ", museBalance);
+  await vnftx.battle(0, 1);
+
+  muse = await MuseToken.balanceOf(
+    "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+  );
+
+  museBalance = new BigNumber(parseInt(muse))
+    .shiftedBy(-parseInt(18))
+    .toFixed(4, 1);
+
+  console.log("muse balance after battle ", museBalance);
+
+  hp = await vnftx.getHp(0);
+  console.log("hp after battle of  #0: ", hp.toString());
+
+  hp = await vnftx.getHp(1);
+  console.log("hp after battle of #1: ", hp.toString());
+
+  // test cahsback
+
+  await vnftx.cashback(0);
+  muse = await MuseToken.balanceOf(
+    "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+  );
+  museBalance = new BigNumber(parseInt(muse))
+    .shiftedBy(-parseInt(18))
+    .toFixed(4, 1);
+
+  console.log("muse balance after cashback ", museBalance);
 }
 
 async function deploy(name, _args) {

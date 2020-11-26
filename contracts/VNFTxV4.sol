@@ -14,6 +14,7 @@ import "@openzeppelin/contracts-upgradeable/utils/EnumerableSetUpgradeable.sol";
 
 import "../interfaces/IMuseToken.sol";
 import "../interfaces/IVNFT.sol";
+import "hardhat/console.sol";
 
 // SPDX-License-Identifier: MIT
 
@@ -178,7 +179,41 @@ contract VNFTxV4 is
     event AttachAddon(uint256 addonId, uint256 nftId);
     event RemoveAddon(uint256 addonId, uint256 nftId);
 
+    uint256 cashbackPct;
+
+    mapping(uint256 => uint256) public hpLostOnBattle;
+    mapping(uint256 => uint256) public timesAttacked;
+    uint256 public randomBlockSize;
+
+    mapping(address => uint256) public toReceiveCashback;
+
     constructor() public {}
+
+    // remove this for laucnch
+    function initialize(
+        IVNFT _vnft,
+        IMuseToken _muse,
+        IERC1155 _addons
+    ) public initializer {
+        vnft = _vnft;
+        muse = _muse;
+        addons = _addons;
+        paused = false;
+        artistPct = 5;
+        healthGemScore = 100;
+        healthGemId = 1;
+        healthGemPrice = 13 * 10**18;
+        healthGemDays = 1;
+        premiumHp = 50;
+        hpMultiplier = 70;
+        rarityMultiplier = 15;
+        addonsMultiplier = 15;
+        expectedAddons = 10;
+        expectedRarity = 300;
+        OwnableUpgradeable.__Ownable_init();
+        cashbackPct = 40;
+        randomBlockSize = 3;
+    }
 
     modifier tokenOwner(uint256 _id) {
         require(
@@ -381,17 +416,14 @@ contract VNFTxV4 is
 
     // kill them all
 
-    mapping(uint256 => uint256) public hpLostOnBattle;
-    mapping(uint256 => uint256) public timesAttacked;
-    uint256 public randomBlockSize = 3;
-
     function battle(uint256 _nftId, uint256 _opponent)
         public
         tokenOwner(_nftId)
     {
         require(_nftId != _opponent, "Can't attack yourself");
-        // change id to battles accessory
-        require(addonsConsumed[_nftId].contains(4), "You need battles addon");
+
+        // TODO change id to battles accessory
+        // require(addonsConsumed[_nftId].contains(4), "You need battles addon");
 
         // require x challenges and x hp or xx rarity for battles
         require(
@@ -403,27 +435,33 @@ contract VNFTxV4 is
             timesAttacked[_opponent] <= 10,
             "This pet was attacked 10 times already"
         );
+
         // require opponent to be of certain threshold 30?
-        require(getHp(_opponent) <= 50, "You can't attack this pet");
+        require(getHp(_opponent) <= 90, "You can't attack this pet");
 
         challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
         timesAttacked[_opponent] = timesAttacked[_opponent].add(1);
 
         //decide winner
+        uint256 loser;
         uint256 winner;
-        if (randomNumber(0, 100) < 70) {
-            winner = _nftId;
-        } else {
+
+        //@TODO fix this
+        if (randomNumber(1, 100) < 70) {
+            loser = _nftId;
             winner = _opponent;
+        } else {
+            loser = _opponent;
+            winner = _nftId;
         }
 
         // then do all calcs based on winner, could be opponent or nftid
-        if (getHp(winner) < 20 || getHp(winner) == 5) {
+        if (getHp(loser) < 20 || getHp(loser) == 5) {
             // halp! need this to make hp be 0
-            hpLostOnBattle[winner] = getHp(winner).add(hpLostOnBattle[winner]);
-        } else if (getHp(winner) >= 20) {
+            hpLostOnBattle[loser] = getHp(loser).add(hpLostOnBattle[winner]);
+        } else if (getHp(loser) >= 20) {
             // reomove 5hp
-            hpLostOnBattle[winner] = hpLostOnBattle[winner].add(5);
+            hpLostOnBattle[loser] = hpLostOnBattle[loser].add(5);
         }
 
         // get 15% of level in muse
@@ -434,32 +472,8 @@ contract VNFTxV4 is
         muse.mint(vnft.ownerOf(winner), museWon * 10**18);
     }
 
-    /* generates a number from 0 to 2^n based on the last n blocks */
-    function randomNumber(uint256 seed, uint256 max)
-        public
-        view
-        returns (uint256 _randomNumber)
-    {
-        uint256 n = 0;
-        for (uint256 i = 0; i < randomBlockSize; i++) {
-            if (
-                uint256(
-                    keccak256(
-                        abi.encodePacked(blockhash(block.number - i - 1), seed)
-                    )
-                ) %
-                    2 ==
-                0
-            ) n += 2**i;
-        }
-        return n % max;
-    }
-
-    mapping(address => uint256) public toReceiveCashback;
-    uint256 cashbackPct = 40;
-
     function cashback(uint256 _nftId) external tokenOwner(_nftId) {
-        // own cahabck addon
+        //TODO  own cahabck addon
         require(addonsConsumed[_nftId].contains(1), "You need cashback addon");
         //    have premium hp
         require(getHp(_nftId) >= premiumHp, "Raise your hp to claim cashback");
@@ -476,13 +490,21 @@ contract VNFTxV4 is
         uint256 timeBorn = vnft.timeVnftBorn(_nftId);
         uint256 daysLived = (now.sub(timeBorn)).div(1 days);
 
+        require(daysLived >= 14, "Lived at least 14 days for cashback");
+
         uint256 expectedScore = daysLived.mul(
             healthGemScore.div(healthGemDays)
         );
 
         uint256 fromScore = min(currentScore.mul(100).div(expectedScore), 100);
+        console.log("fromScore: ", fromScore);
+
         uint256 museSpent = healthGemPrice.mul(7).mul(fromScore).div(100);
+        console.log("museSpent: ", museSpent);
+
         uint256 cashbackAmt = museSpent.mul(cashbackPct).div(100);
+
+        console.log("cashbackAmt: ", cashbackAmt);
 
         muse.mint(msg.sender, cashbackAmt);
     }
@@ -633,7 +655,8 @@ contract VNFTxV4 is
         uint256 _expectedAddons,
         uint256 _addonsMultiplier,
         uint256 _expectedRarity,
-        uint256 _premiumHp
+        uint256 _premiumHp,
+        uint256 _cashbackPct
     ) external onlyOwner {
         healthGemScore = _score;
         healthGemPrice = _healthGemPrice;
@@ -645,6 +668,7 @@ contract VNFTxV4 is
         addonsMultiplier = _addonsMultiplier;
         expectedRarity = _expectedRarity;
         premiumHp = _premiumHp;
+        cashbackPct = _cashbackPct;
     }
 
     function pause(bool _paused) public onlyOwner {
@@ -653,5 +677,26 @@ contract VNFTxV4 is
 
     function min(uint256 a, uint256 b) private pure returns (uint256) {
         return a < b ? a : b;
+    }
+
+    /* generates a number from 0 to 2^n based on the last n blocks */
+    function randomNumber(uint256 seed, uint256 max)
+        public
+        view
+        returns (uint256 _randomNumber)
+    {
+        uint256 n = 0;
+        for (uint256 i = 0; i < randomBlockSize; i++) {
+            if (
+                uint256(
+                    keccak256(
+                        abi.encodePacked(blockhash(block.number - i - 1), seed)
+                    )
+                ) %
+                    2 ==
+                0
+            ) n += 2**i;
+        }
+        return n % max;
     }
 }
