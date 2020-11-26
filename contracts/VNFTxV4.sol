@@ -183,7 +183,6 @@ contract VNFTxV4 is
 
     mapping(uint256 => uint256) public hpLostOnBattle;
     mapping(uint256 => uint256) public timesAttacked;
-    uint256 public randomBlockSize;
 
     mapping(address => uint256) public toReceiveCashback;
 
@@ -212,7 +211,6 @@ contract VNFTxV4 is
         expectedRarity = 300;
         OwnableUpgradeable.__Ownable_init();
         cashbackPct = 40;
-        randomBlockSize = 3;
     }
 
     modifier tokenOwner(uint256 _id) {
@@ -278,7 +276,12 @@ contract VNFTxV4 is
         uint256 hp = (fromRarity.mul(rarityMultiplier))
             .add(fromScore.mul(hpMultiplier))
             .add(fromUsed.mul(addonsMultiplier));
-        return min(hp.div(100), 100).sub(hpLostOnBattle[_nftId]);
+        uint256 endHP = min(hp.div(100), 100);
+        if (endHP <= hpLostOnBattle[_nftId]) { // We check for avoiding underflow
+            return 0;
+        } else {
+            return endHP.sub(hpLostOnBattle[_nftId]);
+        }
     }
 
     function getChallenges(uint256 _nftId) public view returns (uint256) {
@@ -420,6 +423,8 @@ contract VNFTxV4 is
         public
         tokenOwner(_nftId)
     {
+        uint256 oponentHp = getHp(_oponent);
+        uint256 attackerHp = getHp(_nftId);
         require(_nftId != _opponent, "Can't attack yourself");
 
         // TODO change id to battles accessory
@@ -427,7 +432,7 @@ contract VNFTxV4 is
 
         // require x challenges and x hp or xx rarity for battles
         require(
-            getChallenges(_nftId) >= 1 && getHp(_nftId) >= 70, //decide
+            getChallenges(_nftId) >= 1 && attackerHp >= 70, //decide
             "can't challenge"
         );
 
@@ -436,8 +441,9 @@ contract VNFTxV4 is
             "This pet was attacked 10 times already"
         );
 
+
         // require opponent to be of certain threshold 30?
-        require(getHp(_opponent) <= 90, "You can't attack this pet");
+        require(oponentHp <= 90, "You can't attack this pet");
 
         challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
         timesAttacked[_opponent] = timesAttacked[_opponent].add(1);
@@ -447,7 +453,10 @@ contract VNFTxV4 is
         uint256 winner;
 
         //@TODO fix this
-        if (randomNumber(1, 100) < 70) {
+        // The percentage of attack is weighted between your HP and the pet HP
+        // in the case where oponent as 20HP and attacker has 100
+        // the chance of winning is 2 times your HP: 2*100 out of 220 (sum of both HP and attacker hp*2)
+        if (randomNumber(_nftId, oponentHp.add(attackerHp.mul(2))) < oponentHp) {
             loser = _nftId;
             winner = _opponent;
         } else {
@@ -686,7 +695,7 @@ contract VNFTxV4 is
         returns (uint256 _randomNumber)
     {
         uint256 n = 0;
-        for (uint256 i = 0; i < randomBlockSize; i++) {
+        for (uint256 i = 0; i < 3; i++) {
             if (
                 uint256(
                     keccak256(
