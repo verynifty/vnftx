@@ -11,7 +11,7 @@ contract TokenizeNFT is Ownable {
     uint256 public minParticipant = 2;
 
     struct Participant {
-        address nftCntract;
+        address nftContract;
         uint256 nftId;
         uint256 score;
         address payable add;
@@ -38,7 +38,7 @@ contract TokenizeNFT is Ownable {
             address payable winner = address(0);
             // logic to distribute prize
             for (uint256 i; i < participants[currentRace].length; i++) {
-                participants[currentRace][i].score = randomNumber(i, 100000);
+                participants[currentRace][i].score = randomNumber(i, 100).mul(99 + whitelist[participants[currentRace][i].nftContract]).div(100);
                 if (participants[currentRace][i].score > maxScore) {
                     winner = participants[currentRace][i].add;
                     maxScore = participants[currentRace][i].score;
@@ -47,13 +47,17 @@ contract TokenizeNFT is Ownable {
             currentRace = currentRace.add(1);
             winner.transfer(participants[currentRace].length.mul(entryPrice).mul(95).div(100)); //Check reentrency
             raceMaster.transfer(participants[currentRace].length.mul(entryPrice).mul(5).div(100));
-            //Emit race won
+            //Emit race won event
         }
     }
 
-    function joinRace(address _tokenAddress, uint256 tokenId) public payable {
+    function joinRace(address _tokenAddress, uint256 _tokenId) public payable {
         require(msg.value > entryPrice, "Not enough ETH to participate");
         require(whitelist[_tokenAddress] > 0, "This NFT is not whitelisted");
+        //Check if owner of nft
+        // check if nft is not already registered
+        
+        participants[currentRace].push(Participant(_tokenAddress, _tokenId, 0, msg.sender));
         settleRaceIfPossible(); // this will launch the previous race if possible
     }
 
