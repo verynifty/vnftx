@@ -252,9 +252,9 @@ contract VNFTxV4 is
         uint256 daysLived = (now.sub(timeBorn)).div(1 days);
 
         // multiply by healthy gem divided by 2 (every 2 days)
-        uint256 expectedScore = daysLived.mul(
-            healthGemScore.div(healthGemDays)
-        );
+        uint256 expectedScore = daysLived
+            .mul(healthGemScore.div(healthGemDays))
+            .add(hpLostOnBattle[_nftId]);
 
         // get # of addons used
         uint256 addonsUsed = addonsBalanceOf(_nftId);
@@ -276,12 +276,8 @@ contract VNFTxV4 is
         uint256 hp = (fromRarity.mul(rarityMultiplier))
             .add(fromScore.mul(hpMultiplier))
             .add(fromUsed.mul(addonsMultiplier));
-        uint256 endHP = min(hp.div(100), 100);
-        if (endHP <= hpLostOnBattle[_nftId]) { // We check for avoiding underflow
-            return 0;
-        } else {
-            return endHP.sub(hpLostOnBattle[_nftId]);
-        }
+
+        return min(hp.div(100), 100);
     }
 
     function getChallenges(uint256 _nftId) public view returns (uint256) {
@@ -443,7 +439,6 @@ contract VNFTxV4 is
             "This pet was attacked 10 times already"
         );
 
-
         // require opponent to be of certain threshold 30?
         require(oponentHp <= 90, "You can't attack this pet");
 
@@ -458,7 +453,9 @@ contract VNFTxV4 is
         // The percentage of attack is weighted between your HP and the pet HP
         // in the case where oponent as 20HP and attacker has 100
         // the chance of winning is 2 times your HP: 2*100 out of 220 (sum of both HP and attacker hp*2)
-        if (randomNumber(_nftId, oponentHp.add(attackerHp.mul(2))) < oponentHp) {
+        if (
+            randomNumber(_nftId, oponentHp.add(attackerHp.mul(2))) < oponentHp
+        ) {
             loser = _nftId;
             winner = _opponent;
         } else {
@@ -469,10 +466,16 @@ contract VNFTxV4 is
         // then do all calcs based on winner, could be opponent or nftid
         if (getHp(loser) < 20 || getHp(loser) == 5) {
             // halp! need this to make hp be 0
-            hpLostOnBattle[loser] = getHp(loser).add(hpLostOnBattle[winner]);
+            uint256 timeBorn = vnft.timeVnftBorn(_nftId);
+            uint256 daysLived = (now.sub(timeBorn)).div(1 days);
+
+            //this doubles now there requirement to get to hp 70 from score ?
+            hpLostOnBattle[loser] = daysLived.mul(
+                healthGemScore.div(healthGemDays)
+            );
         } else if (getHp(loser) >= 20) {
-            // reomove 5hp
-            hpLostOnBattle[loser] = hpLostOnBattle[loser].add(5);
+            // add 300 so means they need to use 2 gems 2 recover from this.
+            hpLostOnBattle[loser] = hpLostOnBattle[loser].add(300);
         }
 
         // get 15% of level in muse
