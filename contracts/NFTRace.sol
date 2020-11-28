@@ -1,7 +1,11 @@
 pragma solidity ^0.6.0;
 
+pragma experimental ABIEncoderV2;
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract TokenizeNFT is Ownable {
     using SafeMath for uint256;
@@ -38,7 +42,7 @@ contract TokenizeNFT is Ownable {
             address payable winner = address(0);
             // logic to distribute prize
             for (uint256 i; i < participants[currentRace].length; i++) {
-                participants[currentRace][i].score = randomNumber(i, 100).mul(99 + whitelist[participants[currentRace][i].nftContract]).div(100);
+                participants[currentRace][i].score = randomNumber(i, 100).mul(99 + whitelist[participants[currentRace][i].nftContract]).div(100); // Need to check this one more
                 if (participants[currentRace][i].score > maxScore) {
                     winner = participants[currentRace][i].add;
                     maxScore = participants[currentRace][i].score;
@@ -51,22 +55,29 @@ contract TokenizeNFT is Ownable {
         }
     }
 
-    function joinRace(address _tokenAddress, uint256 _tokenId) public payable {
+    function joinRace(address _tokenAddress, uint256 _tokenId, uint256 _tokenType) public payable {
         require(msg.value > entryPrice, "Not enough ETH to participate");
         require(whitelist[_tokenAddress] > 0, "This NFT is not whitelisted");
-        //Check if owner of nft
+        if (_tokenType == 725) {
+            require(IERC721(_tokenAddress).ownerOf(_tokenId) == msg.sender, "You don't own the NFT");
+        } else if (_tokenType == 1155) {
+            require(IERC1155(_tokenAddress).balanceOf(msg.sender, _tokenId) > 0, "You don't own the NFT");
+        }
         // check if nft is not already registered
-        
         participants[currentRace].push(Participant(_tokenAddress, _tokenId, 0, msg.sender));
         settleRaceIfPossible(); // this will launch the previous race if possible
     }
 
-    function getRace(uint256 raceNumber)
+    function getRaceInfo(uint256 raceNumber)
         public
         view
-        returns (uint256 _raceNumber)
+        returns (uint256 _raceNumber, uint256 _participantsCount, Participant[maxParticipants] memory _participants)
     {
         _raceNumber = raceNumber;
+        _participantsCount = participants[raceNumber].length;
+         for (uint256 i; i < participants[raceNumber].length; i++) {
+             _participants[i] = participants[raceNumber][i];
+         }
     }
 
     /* generates a number from 0 to 2^n based on the last n blocks */
