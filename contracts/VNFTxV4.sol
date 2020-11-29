@@ -296,6 +296,11 @@ contract VNFTxV4 is
         Addon storage _addon = addon[addonId];
 
         require(
+            !addonsConsumed[_nftId].contains(_addonID),
+            "Pet already has this addon"
+        );
+
+        require(
             getHp(_nftId) >= _addon.requiredhp,
             "Raise your HP to buy this addon"
         );
@@ -474,8 +479,10 @@ contract VNFTxV4 is
                 healthGemScore.div(healthGemDays)
             );
         } else if (getHp(loser) >= 20) {
-            // add 300 so means they need to use 2 gems 2 recover from this.
-            hpLostOnBattle[loser] = hpLostOnBattle[loser].add(300);
+            // add 2 days of gem health score
+            hpLostOnBattle[loser] = hpLostOnBattle[loser].add(
+                healthGemScore.mul(3)
+            );
         }
 
         // get 15% of level in muse
