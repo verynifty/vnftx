@@ -296,7 +296,7 @@ contract VNFTxV4 is
         Addon storage _addon = addon[addonId];
 
         require(
-            !addonsConsumed[_nftId].contains(_addonID),
+            !addonsConsumed[_nftId].contains(addonId),
             "Pet already has this addon"
         );
 
