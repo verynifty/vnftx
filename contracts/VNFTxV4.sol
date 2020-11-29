@@ -487,8 +487,8 @@ contract VNFTxV4 is
 
         // get 15% of level in muse
         uint256 museWon = vnft.level(winner).mul(15).div(100);
-        if (museWon < 4) {
-            museWon = 3;
+        if (museWon <= 4) {
+            museWon = 4;
         }
         muse.mint(vnft.ownerOf(winner), museWon * 10**18);
     }
