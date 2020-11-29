@@ -470,16 +470,12 @@ contract VNFTxV4 is
 
         // then do all calcs based on winner, could be opponent or nftid
         if (getHp(loser) < 20 || getHp(loser) == 5) {
-            // halp! need this to make hp be 0
-            uint256 timeBorn = vnft.timeVnftBorn(_nftId);
-            uint256 daysLived = (now.sub(timeBorn)).div(1 days);
-
-            //this doubles now there requirement to get to hp 70 from score ?
-            hpLostOnBattle[loser] = daysLived.mul(
-                healthGemScore.div(healthGemDays)
+            // need 6 health gem score more to to expected score
+            hpLostOnBattle[loser] = hpLostOnBattle[loser].add(
+                healthGemScore.mul(6)
             );
         } else if (getHp(loser) >= 20) {
-            // add 2 days of gem health score
+            // need 3 health gem score more to to expected score
             hpLostOnBattle[loser] = hpLostOnBattle[loser].add(
                 healthGemScore.mul(3)
             );
