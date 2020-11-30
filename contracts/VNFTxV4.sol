@@ -426,7 +426,7 @@ contract VNFTxV4 is
         ) {
         oponentHp = getHp(_opponent);
         attackerHp = getHp(_nftId);
-        successPercent = attackerHp.mul(2).mul(100).div(oponentHp.add(attackerHp.mul(2))); // TODO JULEs manually check
+        successPercent = attackerHp.mul(2).mul(100).div(oponentHp.add(attackerHp.mul(2)));
         estimatedReward = vnft.level(_nftId).mul(15).div(100);
         if (estimatedReward <= 4) {
             estimatedReward = 4;
@@ -468,7 +468,6 @@ contract VNFTxV4 is
         uint256 loser;
         uint256 winner;
 
-        //@TODO fix this
         // The percentage of attack is weighted between your HP and the pet HP
         // in the case where oponent as 20HP and attacker has 100
         // the chance of winning is 2 times your HP: 2*100 out of 220 (sum of both HP and attacker hp*2)
@@ -626,7 +625,7 @@ contract VNFTxV4 is
         _rarity = rarity[_nftId];
         _hp = getHp(_nftId);
         _addonsCount = addonsBalanceOf(_nftId);
-        uint256 index = 0; // NOT FOR @JULES THIS IS HIGHLY EXPERIMENTAL NEED TO TEST
+        uint256 index = 0;
         while (index < _addonsCount && index < 10) {
             _addons[index] = (addonsConsumed[_nftId].at(index));
             index = index + 1;
