@@ -427,7 +427,7 @@ contract VNFTxV4 is
         oponentHp = getHp(_opponent);
         attackerHp = getHp(_nftId);
         successPercent = attackerHp.mul(2).mul(100).div(oponentHp.add(attackerHp.mul(2)));
-        estimatedReward = vnft.level(_nftId).mul(15).div(100);
+        estimatedReward = vnft.level(_nftId).add(vnft.level(_opponent)).mul(10).div(100);
         if (estimatedReward <= 4) {
             estimatedReward = 4;
         }
@@ -496,7 +496,7 @@ contract VNFTxV4 is
 
         if (winner == _nftId) {
             // get 15% of level in muse
-            uint256 museWon = vnft.level(winner).mul(15).div(100);
+            uint256 museWon = vnft.level(winner).add(vnft.level(loser)).mul(10).div(100);
             if (museWon <= 4) {
                 museWon = 4;
             }
