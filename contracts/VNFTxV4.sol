@@ -418,8 +418,22 @@ contract VNFTxV4 is
         }
     }
 
-    // kill them all
+    function getAttackInfo(uint256 _nftId, uint256 _opponent) public view returns (
+            uint256 oponentHp,
+            uint256 attackerHp,
+            uint256 successPercent,
+            uint256 estimatedReward
+        ) {
+        oponentHp = getHp(_opponent);
+        attackerHp = getHp(_nftId);
+        successPercent = attackerHp.mul(2).mul(100).div(oponentHp.add(attackerHp.mul(2))); // TODO JULEs manually check
+        estimatedReward = vnft.level(_nftId).mul(15).div(100);
+        if (estimatedReward <= 4) {
+            estimatedReward = 4;
+        }
+    }
 
+    // kill them all
     function battle(uint256 _nftId, uint256 _opponent)
         public
         tokenOwner(_nftId)
@@ -481,12 +495,15 @@ contract VNFTxV4 is
             );
         }
 
-        // get 15% of level in muse
-        uint256 museWon = vnft.level(winner).mul(15).div(100);
-        if (museWon <= 4) {
-            museWon = 4;
+        if (winner == _nftId) {
+            // get 15% of level in muse
+            uint256 museWon = vnft.level(winner).mul(15).div(100);
+            if (museWon <= 4) {
+                museWon = 4;
+            }
+            muse.mint(vnft.ownerOf(winner), museWon * 10**18);
         }
-        muse.mint(vnft.ownerOf(winner), museWon * 10**18);
+
     }
 
     function cashback(uint256 _nftId) external tokenOwner(_nftId) {

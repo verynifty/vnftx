@@ -31,6 +31,9 @@ contract TokenizeNFT is Ownable {
 
     address payable raceMaster = address(0);
 
+    event raceEnded(uint256 prize, address winner);
+    event participantEntered(uint256 bet, address who);
+
     constructor() public {}
 
     function settleRaceIfPossible() public {
@@ -52,6 +55,7 @@ contract TokenizeNFT is Ownable {
             winner.transfer(participants[currentRace].length.mul(entryPrice).mul(95).div(100)); //Check reentrency
             raceMaster.transfer(participants[currentRace].length.mul(entryPrice).mul(5).div(100));
             //Emit race won event
+            emit raceEnded(participants[currentRace].length.mul(entryPrice).mul(95).div(100), winner);
         }
     }
 
@@ -66,6 +70,7 @@ contract TokenizeNFT is Ownable {
         // check if nft is not already registered
         participants[currentRace].push(Participant(_tokenAddress, _tokenId, 0, msg.sender));
         settleRaceIfPossible(); // this will launch the previous race if possible
+        emit participantEntered(entryPrice, msg.sender);
     }
 
     function getRaceInfo(uint256 raceNumber)
