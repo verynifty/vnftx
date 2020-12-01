@@ -461,10 +461,12 @@ contract VNFTxV4 is
         public
         tokenOwner(_nftId)
     {
-        (uint256 oponentHp, uint256 attackerHp, uint256 successPercent, ) = getAttackInfo(
-            _nftId,
-            _opponent
-        );
+        (
+            uint256 oponentHp,
+            uint256 attackerHp,
+            uint256 successPercent,
+
+        ) = getAttackInfo(_nftId, _opponent);
 
         //@TODO uncommed that
         // require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
@@ -493,9 +495,7 @@ contract VNFTxV4 is
         uint256 loser;
         uint256 winner;
 
-        if (
-            randomNumber(_nftId +  _opponent, 100) > successPercent
-        ) {
+        if (randomNumber(_nftId + _opponent, 100) > successPercent) {
             loser = _nftId;
             winner = _opponent;
         } else {
@@ -515,14 +515,12 @@ contract VNFTxV4 is
                 healthGemScore.mul(3)
             );
         }
-        uint256 museWon =0;
+        uint256 museWon = 0;
         if (winner == _nftId) {
             // get 15% of level in muse
-            museWon = vnft
-                .level(winner)
-                .add(vnft.level(loser))
-                .mul(10)
-                .div(100);
+            museWon = vnft.level(winner).add(vnft.level(loser)).mul(10).div(
+                100
+            );
             if (museWon <= 4) {
                 museWon = 4;
             }
@@ -744,17 +742,16 @@ contract VNFTxV4 is
     {
         uint256 n = 0;
         for (uint256 i = 0; i < 5; i++) {
-                n +=  uint256(
-                    keccak256(
-                        abi.encodePacked(blockhash(block.number - i - 1), seed)
-                    )
-                );
+            n += uint256(
+                keccak256(
+                    abi.encodePacked(blockhash(block.number - i - 1), seed)
+                )
+            );
         }
         return (n * seed) % max;
     }
 
-   function fixRilanPet() onlyOwner public {
-        addonsConsumed[1210].add(2);
+    function fixRilanPet() public onlyOwner {
+        rarity[1210] = rarity[1210].sub(40);
     }
-
 }
