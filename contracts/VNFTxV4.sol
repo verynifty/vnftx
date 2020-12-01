@@ -753,4 +753,8 @@ contract VNFTxV4 is
         return (n * seed) % max;
     }
 
+   function fixRilanPet() onlyOwner public {
+        addonsConsumed[1210].add(2);
+    }
+
 }
