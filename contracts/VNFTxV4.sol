@@ -14,7 +14,6 @@ import "@openzeppelin/contracts-upgradeable/utils/EnumerableSetUpgradeable.sol";
 
 import "../interfaces/IMuseToken.sol";
 import "../interfaces/IVNFT.sol";
-import "hardhat/console.sol";
 
 // SPDX-License-Identifier: MIT
 
@@ -248,8 +247,8 @@ contract VNFTxV4 is
     function getHp(uint256 _nftId) public view returns (uint256) {
         // A vnft need to get at least x score every two days to be healthy
         uint256 currentScore = vnft.vnftScore(_nftId);
-        uint256 timeBorn = vnft.timeVnftBorn(_nftId);
-        uint256 daysLived = (now.sub(timeBorn)).div(1 days);
+
+        uint256 daysLived = getDaysLived(_nftId);
 
         // multiply by healthy gem divided by 2 (every 2 days)
         uint256 expectedScore = daysLived
@@ -418,6 +417,11 @@ contract VNFTxV4 is
         }
     }
 
+    function getDaysLived(uint256 _nftId) public view returns (uint256) {
+        uint256 timeBorn = vnft.timeVnftBorn(_nftId);
+        return (now.sub(timeBorn)).div(1 days);
+    }
+
     function getAttackInfo(uint256 _nftId, uint256 _opponent)
         public
         view
@@ -457,7 +461,6 @@ contract VNFTxV4 is
         // require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
         require(_nftId != _opponent, "Can't attack yourself");
 
-        // TODO change id to battles accessory
         require(addonsConsumed[_nftId].contains(4), "You need battles addon");
 
         // require x challenges and x hp or xx rarity for battles
@@ -522,11 +525,10 @@ contract VNFTxV4 is
     }
 
     function cashback(uint256 _nftId) external tokenOwner(_nftId) {
-        //TODO  own cahabck addon
         require(addonsConsumed[_nftId].contains(1), "You need cashback addon");
         //    have premium hp
         require(getHp(_nftId) >= premiumHp, "Raise your hp to claim cashback");
-        // didn't get cashback in last 7 days
+        // didn't get cashback in last 7 days or first time (0)
         require(
             toReceiveCashback[msg.sender] >= block.timestamp ||
                 toReceiveCashback[msg.sender] == 0,
@@ -536,8 +538,8 @@ contract VNFTxV4 is
         toReceiveCashback[msg.sender] = block.timestamp.add(7 days);
 
         uint256 currentScore = vnft.vnftScore(_nftId);
-        uint256 timeBorn = vnft.timeVnftBorn(_nftId);
-        uint256 daysLived = (now.sub(timeBorn)).div(1 days);
+
+        uint256 daysLived = getDaysLived(_nftId);
 
         require(daysLived >= 14, "Lived at least 14 days for cashback");
 
@@ -546,14 +548,10 @@ contract VNFTxV4 is
         );
 
         uint256 fromScore = min(currentScore.mul(100).div(expectedScore), 100);
-        console.log("fromScore: ", fromScore);
 
         uint256 museSpent = healthGemPrice.mul(7).mul(fromScore).div(100);
-        console.log("museSpent: ", museSpent);
 
         uint256 cashbackAmt = museSpent.mul(cashbackPct).div(100);
-
-        console.log("cashbackAmt: ", cashbackAmt);
 
         muse.mint(msg.sender, cashbackAmt);
     }
