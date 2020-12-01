@@ -15,6 +15,8 @@ import "@openzeppelin/contracts-upgradeable/utils/EnumerableSetUpgradeable.sol";
 import "../interfaces/IMuseToken.sol";
 import "../interfaces/IVNFT.sol";
 
+// import "hardhat/console.sol";
+
 // SPDX-License-Identifier: MIT
 
 // Extending IERC1155 with mint and burn
@@ -185,8 +187,8 @@ contract VNFTxV4 is
 
     mapping(address => uint256) public toReceiveCashback;
 
-    event Cashback(address player, uint256 amount);
-    event Battle(address winner, address loser, uint256 museWon);
+    event Cashback(uint256 nft, uint256 amount);
+    event Battle(uint256 winner, uint256 loser, uint256 museWon);
 
     constructor() public {}
 
@@ -437,9 +439,13 @@ contract VNFTxV4 is
     {
         oponentHp = getHp(_opponent);
         attackerHp = getHp(_nftId);
-        successPercent = attackerHp.mul(2).mul(100).div(
-            oponentHp.add(attackerHp.mul(2))
+        // The percentage of attack is weighted between your HP and the pet HP
+        // in the case where oponent as 20HP and attacker has 100
+        // the chance of winning is 3 times your HP: 3*100 out of 320 (sum of both HP and attacker hp*3)
+        successPercent = attackerHp.mul(3).mul(100).div(
+            oponentHp.add(attackerHp.mul(3))
         );
+
         estimatedReward = vnft
             .level(_nftId)
             .add(vnft.level(_opponent))
@@ -455,7 +461,7 @@ contract VNFTxV4 is
         public
         tokenOwner(_nftId)
     {
-        (uint256 oponentHp, uint256 attackerHp, , ) = getAttackInfo(
+        (uint256 oponentHp, uint256 attackerHp, uint256 successPercent, ) = getAttackInfo(
             _nftId,
             _opponent
         );
@@ -487,11 +493,8 @@ contract VNFTxV4 is
         uint256 loser;
         uint256 winner;
 
-        // The percentage of attack is weighted between your HP and the pet HP
-        // in the case where oponent as 20HP and attacker has 100
-        // the chance of winning is 2 times your HP: 2*100 out of 220 (sum of both HP and attacker hp*2)
         if (
-            randomNumber(_nftId, oponentHp.add(attackerHp.mul(2))) < oponentHp
+            randomNumber(_nftId +  _opponent, 100) > successPercent
         ) {
             loser = _nftId;
             winner = _opponent;
@@ -512,10 +515,10 @@ contract VNFTxV4 is
                 healthGemScore.mul(3)
             );
         }
-
+        uint256 museWon =0;
         if (winner == _nftId) {
             // get 15% of level in muse
-            uint256 museWon = vnft
+            museWon = vnft
                 .level(winner)
                 .add(vnft.level(loser))
                 .mul(10)
@@ -560,7 +563,7 @@ contract VNFTxV4 is
 
         muse.mint(msg.sender, cashbackAmt);
 
-        emit Cashback(msg.sender, cashbackAmt);
+        emit Cashback(_nftId, cashbackAmt);
     }
 
     // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
@@ -740,17 +743,14 @@ contract VNFTxV4 is
         returns (uint256 _randomNumber)
     {
         uint256 n = 0;
-        for (uint256 i = 0; i < 3; i++) {
-            if (
-                uint256(
+        for (uint256 i = 0; i < 5; i++) {
+                n +=  uint256(
                     keccak256(
                         abi.encodePacked(blockhash(block.number - i - 1), seed)
                     )
-                ) %
-                    2 ==
-                0
-            ) n += 2**i;
+                );
         }
-        return n % max;
+        return (n * seed) % max;
     }
+
 }
