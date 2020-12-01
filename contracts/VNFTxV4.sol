@@ -163,6 +163,8 @@ contract VNFTxV4 is
 
     /* END V1 STORAGE */
 
+    uint256 cashbackPct;
+
     event BuyAddon(uint256 nftId, uint256 addon, address player);
     event CreateAddon(
         uint256 addonId,
@@ -179,8 +181,6 @@ contract VNFTxV4 is
     event AttachAddon(uint256 addonId, uint256 nftId);
     event RemoveAddon(uint256 addonId, uint256 nftId);
 
-    uint256 cashbackPct;
-
     mapping(uint256 => uint256) public hpLostOnBattle;
     mapping(uint256 => uint256) public timesAttacked;
 
@@ -188,7 +188,7 @@ contract VNFTxV4 is
 
     constructor() public {}
 
-    // remove this for laucnch
+    //TODO remove this for laucnch
     function initialize(
         IVNFT _vnft,
         IMuseToken _muse,
@@ -418,16 +418,26 @@ contract VNFTxV4 is
         }
     }
 
-    function getAttackInfo(uint256 _nftId, uint256 _opponent) public view returns (
+    function getAttackInfo(uint256 _nftId, uint256 _opponent)
+        public
+        view
+        returns (
             uint256 oponentHp,
             uint256 attackerHp,
             uint256 successPercent,
             uint256 estimatedReward
-        ) {
+        )
+    {
         oponentHp = getHp(_opponent);
         attackerHp = getHp(_nftId);
-        successPercent = attackerHp.mul(2).mul(100).div(oponentHp.add(attackerHp.mul(2)));
-        estimatedReward = vnft.level(_nftId).add(vnft.level(_opponent)).mul(10).div(100);
+        successPercent = attackerHp.mul(2).mul(100).div(
+            oponentHp.add(attackerHp.mul(2))
+        );
+        estimatedReward = vnft
+            .level(_nftId)
+            .add(vnft.level(_opponent))
+            .mul(10)
+            .div(100);
         if (estimatedReward <= 4) {
             estimatedReward = 4;
         }
@@ -438,14 +448,17 @@ contract VNFTxV4 is
         public
         tokenOwner(_nftId)
     {
-        uint256 oponentHp = getHp(_opponent);
-        uint256 attackerHp = getHp(_nftId);
+        (uint256 oponentHp, uint256 attackerHp, , ) = getAttackInfo(
+            _nftId,
+            _opponent
+        );
 
-        require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
+        //@TODO uncommed that
+        // require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
         require(_nftId != _opponent, "Can't attack yourself");
 
         // TODO change id to battles accessory
-        // require(addonsConsumed[_nftId].contains(4), "You need battles addon");
+        require(addonsConsumed[_nftId].contains(4), "You need battles addon");
 
         // require x challenges and x hp or xx rarity for battles
         require(
@@ -496,13 +509,16 @@ contract VNFTxV4 is
 
         if (winner == _nftId) {
             // get 15% of level in muse
-            uint256 museWon = vnft.level(winner).add(vnft.level(loser)).mul(10).div(100);
+            uint256 museWon = vnft
+                .level(winner)
+                .add(vnft.level(loser))
+                .mul(10)
+                .div(100);
             if (museWon <= 4) {
                 museWon = 4;
             }
             muse.mint(vnft.ownerOf(winner), museWon * 10**18);
         }
-
     }
 
     function cashback(uint256 _nftId) external tokenOwner(_nftId) {
