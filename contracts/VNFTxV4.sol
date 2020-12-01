@@ -185,6 +185,9 @@ contract VNFTxV4 is
 
     mapping(address => uint256) public toReceiveCashback;
 
+    event Cashback(address player, uint256 amount);
+    event Battle(address winner, address loser, uint256 museWon);
+
     constructor() public {}
 
     //TODO remove this for laucnch
@@ -522,6 +525,8 @@ contract VNFTxV4 is
             }
             muse.mint(vnft.ownerOf(winner), museWon * 10**18);
         }
+
+        emit Battle(winner, loser, museWon);
     }
 
     function cashback(uint256 _nftId) external tokenOwner(_nftId) {
@@ -554,6 +559,8 @@ contract VNFTxV4 is
         uint256 cashbackAmt = museSpent.mul(cashbackPct).div(100);
 
         muse.mint(msg.sender, cashbackAmt);
+
+        emit Cashback(msg.sender, cashbackAmt);
     }
 
     // this is in case a dead pet addons is stuck in contract, we can use for diff cases.
