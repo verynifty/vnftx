@@ -31,6 +31,7 @@ async function main() {
     VNFTxV4,
     { unsafeAllowCustomTypes: true }
   );
+  
 }
 
 async function deploy(name, _args) {

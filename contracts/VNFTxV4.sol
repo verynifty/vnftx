@@ -189,6 +189,10 @@ contract VNFTxV4 is
     event Cashback(uint256 nft, uint256 amount);
     event Battle(uint256 winner, uint256 loser, uint256 museWon);
 
+    /*
+    ** END OF V4 STORAGE
+    */
+
     constructor() public {}
 
     modifier tokenOwner(uint256 _id) {

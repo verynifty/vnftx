@@ -11,6 +11,7 @@
     "mainnet": "hardhat run --network mainnet ./scripts/deploy_mainnet.js ",
     "prepare": "hardhat run ./scripts/prepare-upgrade.js",
     "upgrade": "hardhat run ./scripts/upgrade.js",
+    "v3": "hardhat run ./scripts/deploy_make_v3.js",
     "testupgradevar": "hardhat run ./scripts/testUpgradeWithVar.js",
     "console": "hardhat console",
     "verify": "hardhat --network mainnet etherscan-verify --license MIT"
