@@ -750,8 +750,4 @@ contract VNFTxV4 is
         }
         return (n * seed) % max;
     }
-
-    function fixRilanPet() public onlyOwner {
-        rarity[1210] = rarity[1210].sub(40);
-    }
 }
