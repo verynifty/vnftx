@@ -186,6 +186,7 @@ contract VNFTxV4 is
     mapping(uint256 => uint256) public timesAttacked;
 
     mapping(address => uint256) public toReceiveCashback;
+    mapping(address => uint256) public alreadyReceivedCashback;
 
     event Cashback(uint256 nft, uint256 amount);
     event Battle(uint256 winner, uint256 loser, uint256 museWon);
@@ -561,6 +562,8 @@ contract VNFTxV4 is
 
         muse.mint(msg.sender, cashbackAmt);
 
+        alreadyReceivedCashback[msg.sender] = alreadyReceivedCashback[msg.sender] + cashbackAmt;
+
         emit Cashback(_nftId, cashbackAmt);
     }
 
@@ -749,9 +752,5 @@ contract VNFTxV4 is
             );
         }
         return (n * seed) % max;
-    }
-
-    function fixRilanPet() public onlyOwner {
-        rarity[1210] = rarity[1210].sub(40);
     }
 }
