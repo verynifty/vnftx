@@ -259,7 +259,8 @@ async function main() {
   console.log("hp after battle of #1: ", hp.toString());
 
   // test cahsback
-
+  // print current score after 7 days
+  console.log((await VNFT.vnftScore(0)).toString());
   await vnftx.cashback(0);
   muse = await MuseToken.balanceOf(
     "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"

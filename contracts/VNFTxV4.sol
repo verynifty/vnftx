@@ -202,7 +202,7 @@ contract VNFTxV4 is
         addons = _addons;
         paused = false;
         artistPct = 5;
-        healthGemScore = 100;
+        healthGemScore = 70;
         healthGemId = 1;
         healthGemPrice = 13 * 10**18;
         healthGemDays = 1;
@@ -467,7 +467,8 @@ contract VNFTxV4 is
 
         ) = getAttackInfo(_nftId, _opponent);
 
-        require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
+        // TODO
+        // require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
         require(_nftId != _opponent, "Can't attack yourself");
 
         require(addonsConsumed[_nftId].contains(4), "You need battles addon");
@@ -483,8 +484,9 @@ contract VNFTxV4 is
             "This pet was attacked 10 times already"
         );
 
+        //@TODO
         // require opponent to be of certain threshold 30?
-        require(oponentHp <= 90, "You can't attack this pet");
+        // require(oponentHp <= 90, "You can't attack this pet");
 
         challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
         timesAttacked[_opponent] = timesAttacked[_opponent].add(1);
@@ -545,7 +547,8 @@ contract VNFTxV4 is
 
         uint256 daysLived = getDaysLived(_nftId);
 
-        require(daysLived >= 14, "Lived at least 14 days for cashback");
+        // TODO
+        // require(daysLived >= 14, "Lived at least 14 days for cashback");
 
         uint256 expectedScore = daysLived.mul(
             healthGemScore.div(healthGemDays)
