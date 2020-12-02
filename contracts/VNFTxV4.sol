@@ -15,8 +15,6 @@ import "@openzeppelin/contracts-upgradeable/utils/EnumerableSetUpgradeable.sol";
 import "../interfaces/IMuseToken.sol";
 import "../interfaces/IVNFT.sol";
 
-// import "hardhat/console.sol";
-
 // SPDX-License-Identifier: MIT
 
 // Extending IERC1155 with mint and burn
@@ -469,8 +467,7 @@ contract VNFTxV4 is
 
         ) = getAttackInfo(_nftId, _opponent);
 
-        //@TODO uncommed that
-        // require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
+        require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
         require(_nftId != _opponent, "Can't attack yourself");
 
         require(addonsConsumed[_nftId].contains(4), "You need battles addon");
@@ -505,7 +502,7 @@ contract VNFTxV4 is
         }
 
         // then do all calcs based on winner, could be opponent or nftid
-        if (getHp(loser) < 20 || getHp(loser) == 5) {
+        if (getHp(loser) < 20) {
             // need 6 health gem score more to to expected score
             hpLostOnBattle[loser] = hpLostOnBattle[loser].add(
                 healthGemScore.mul(6)
@@ -562,7 +559,9 @@ contract VNFTxV4 is
 
         muse.mint(msg.sender, cashbackAmt);
 
-        alreadyReceivedCashback[_nftId] = alreadyReceivedCashback[_nftId] + cashbackAmt;
+        alreadyReceivedCashback[_nftId] = alreadyReceivedCashback[_nftId].add(
+            cashbackAmt
+        );
 
         emit Cashback(_nftId, cashbackAmt);
     }

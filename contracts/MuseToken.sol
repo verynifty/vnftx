@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol";
 
 contract MuseToken is ERC20PresetMinterPauser {
     // Cap at 1 million
-    uint256 internal _cap = 1000000 * 10**18;
+    uint256 internal _cap = 1000000000 * 10**18;
 
     constructor() public ERC20PresetMinterPauser("Muse", "MUSE") {}
 

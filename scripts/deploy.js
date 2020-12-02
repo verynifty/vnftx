@@ -53,7 +53,7 @@ async function main() {
 
   await MuseToken.mint(
     "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
-    "1000000000000000000000"
+    "10000000000000000000000"
   );
 
   console.log("🚀 Granted MuseToken Minter Role to MasterChef \n");
