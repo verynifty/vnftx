@@ -8,7 +8,7 @@
     "test": "hardhat test --network hardhatevm",
     "compile": "hardhat compile",
     "deploy": "hardhat run ./scripts/deploy.js",
-    "mainnet": "hardhat run ./scripts/deploy_mainnet.js",
+    "mainnet": "hardhat run --network mainnet ./scripts/deploy_mainnet.js ",
     "prepare": "hardhat run ./scripts/prepare-upgrade.js",
     "upgrade": "hardhat run ./scripts/upgrade.js",
     "testupgradevar": "hardhat run ./scripts/testUpgradeWithVar.js",
