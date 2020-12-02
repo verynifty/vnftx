@@ -308,7 +308,6 @@ contract VNFTxV4 is
             "Raise your HP to buy this addon"
         );
         require(
-            // @TODO double check < or <=
             _addon.used < _addon.quantity &&
                 addons.balanceOf(address(this), addonId) >= 1,
             "Addon not available"
@@ -459,6 +458,7 @@ contract VNFTxV4 is
     function battle(uint256 _nftId, uint256 _opponent)
         public
         tokenOwner(_nftId)
+        notPaused()
     {
         (
             uint256 oponentHp,
@@ -467,8 +467,7 @@ contract VNFTxV4 is
 
         ) = getAttackInfo(_nftId, _opponent);
 
-        // TODO
-        // require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
+        require(vnft.ownerOf(_opponent) != msg.sender, "Can't atack yourself");
         require(_nftId != _opponent, "Can't attack yourself");
 
         require(addonsConsumed[_nftId].contains(4), "You need battles addon");
@@ -484,9 +483,8 @@ contract VNFTxV4 is
             "This pet was attacked 10 times already"
         );
 
-        //@TODO
         // require opponent to be of certain threshold 30?
-        // require(oponentHp <= 90, "You can't attack this pet");
+        require(oponentHp <= 90, "You can't attack this pet");
 
         challengesUsed[_nftId] = challengesUsed[_nftId].add(1);
         timesAttacked[_opponent] = timesAttacked[_opponent].add(1);
@@ -530,7 +528,7 @@ contract VNFTxV4 is
         emit Battle(winner, loser, museWon);
     }
 
-    function cashback(uint256 _nftId) external tokenOwner(_nftId) {
+    function cashback(uint256 _nftId) external tokenOwner(_nftId) notPaused() {
         require(addonsConsumed[_nftId].contains(1), "You need cashback addon");
         //    have premium hp
         require(getHp(_nftId) >= premiumHp, "Raise your hp to claim cashback");
@@ -547,8 +545,7 @@ contract VNFTxV4 is
 
         uint256 daysLived = getDaysLived(_nftId);
 
-        // TODO
-        // require(daysLived >= 14, "Lived at least 14 days for cashback");
+        require(daysLived >= 14, "Lived at least 14 days for cashback");
 
         uint256 expectedScore = daysLived.mul(
             healthGemScore.div(healthGemDays)

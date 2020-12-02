@@ -258,6 +258,7 @@ async function main() {
   hp = await vnftx.getHp(1);
   console.log("hp after battle of #1: ", hp.toString());
 
+  await vnftx.pause(true);
   // test cahsback
   // print current score after 7 days
   console.log((await VNFT.vnftScore(0)).toString());
