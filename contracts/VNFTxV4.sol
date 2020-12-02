@@ -562,7 +562,7 @@ contract VNFTxV4 is
 
         muse.mint(msg.sender, cashbackAmt);
 
-        alreadyReceivedCashback[_nftId] = alreadyReceivedCashback[msg.sender] + cashbackAmt;
+        alreadyReceivedCashback[_nftId] = alreadyReceivedCashback[_nftId] + cashbackAmt;
 
         emit Cashback(_nftId, cashbackAmt);
     }
