@@ -180,7 +180,6 @@ contract VNFTxV4 is
     event AttachAddon(uint256 addonId, uint256 nftId);
     event RemoveAddon(uint256 addonId, uint256 nftId);
 
-
     /* EnD OF v3 Storage */
 
     mapping(uint256 => uint256) public hpLostOnBattle;
@@ -193,8 +192,8 @@ contract VNFTxV4 is
     event Battle(uint256 winner, uint256 loser, uint256 museWon);
 
     /*
-    ** END OF V4 STORAGE
-    */
+     ** END OF V4 STORAGE
+     */
 
     constructor() public {}
 
@@ -211,6 +210,10 @@ contract VNFTxV4 is
         _;
     }
 
+    modifier containsAddon(uint256 nftId, uint256 addonId) {
+        require(addonsConsumed[nftId].contains(addonId), "fail");
+        _;
+    }
     modifier notPaused() {
         require(!paused, "2"); //Contract paused!
         _;
@@ -280,15 +283,9 @@ contract VNFTxV4 is
     {
         Addon storage _addon = addon[addonId];
 
-        require(
-            !addonsConsumed[_nftId].contains(addonId),
-            "4"
-        ); // Pet already has this addon
+        require(!addonsConsumed[_nftId].contains(addonId), "4"); // Pet already has this addon
 
-        require(
-            getHp(_nftId) >= _addon.requiredhp,
-            "5"
-        ); // Pet already has this addon
+        require(getHp(_nftId) >= _addon.requiredhp, "5"); // Pet already has this addon
         require(
             _addon.used < _addon.quantity &&
                 addons.balanceOf(address(this), addonId) >= 1,
@@ -313,21 +310,12 @@ contract VNFTxV4 is
         tokenOwner(_nftId)
         notPaused()
     {
-        require(
-            !addonsConsumed[_nftId].contains(_addonID),
-            "4" 
-        );// Pet already has this addon
-        require(
-            addons.balanceOf(msg.sender, _addonID) >= 1,
-            "7"
-        );//own the addon to use it
+        require(!addonsConsumed[_nftId].contains(_addonID), "4"); // Pet already has this addon
+        require(addons.balanceOf(msg.sender, _addonID) >= 1, "7"); //own the addon to use it
 
         Addon storage _addon = addon[_addonID];
 
-        require(
-            getHp(_nftId) >= _addon.requiredhp,
-            "8"
-        ); // Raise your HP to use this addon
+        require(getHp(_nftId) >= _addon.requiredhp, "8"); // Raise your HP to use this addon
 
         addonsConsumed[_nftId].add(_addonID);
 
@@ -337,7 +325,7 @@ contract VNFTxV4 is
         emit AttachAddon(_addonID, _nftId);
     }
 
-/*
+    /*
     function transferAddon(
         uint256 _nftId,
         uint256 _addonID,
@@ -364,12 +352,8 @@ contract VNFTxV4 is
         public
         tokenOwner(_nftId)
         notLocked(_addonID)
+        containsAddon(_nftId, _addonID)
     {
-        // maybe can take this out for gas and the .remove would throw if no addonid on user?
-        require(
-            addonsConsumed[_nftId].contains(_addonID),
-            "9"
-        ); // Pet doesn't have this addon
         Addon storage _addon = addon[_addonID];
         rarity[_nftId] = rarity[_nftId].sub(_addon.rarity);
 
@@ -442,6 +426,7 @@ contract VNFTxV4 is
     function battle(uint256 _nftId, uint256 _opponent)
         public
         tokenOwner(_nftId)
+        containsAddon(_nftId, 4)
         notPaused()
     {
         (
@@ -452,9 +437,6 @@ contract VNFTxV4 is
         ) = getAttackInfo(_nftId, _opponent);
 
         require(vnft.ownerOf(_opponent) != msg.sender, "A"); // Can't atack yourself
-        require(_nftId != _opponent, "B"); // Can't attack yourself
-
-        require(addonsConsumed[_nftId].contains(4), "C"); // You need battles addon
 
         // require x challenges and x hp or xx rarity for battles
         require(
@@ -462,10 +444,7 @@ contract VNFTxV4 is
             "D"
         ); // can't challenge
 
-        require(
-            timesAttacked[_opponent] <= 10,
-            "E"
-        ); // This pet was attacked 10 times already
+        require(timesAttacked[_opponent] <= 10, "E"); // This pet was attacked 10 times already
 
         // require opponent to be of certain threshold 30?
         require(oponentHp <= 90, "F"); // You can't attack this pet
@@ -510,8 +489,12 @@ contract VNFTxV4 is
         emit Battle(winner, loser, museWon);
     }
 
-    function cashback(uint256 _nftId) external tokenOwner(_nftId) notPaused() {
-        require(addonsConsumed[_nftId].contains(1), "G"); // You need cashback addon
+    function cashback(uint256 _nftId)
+        external
+        tokenOwner(_nftId)
+        containsAddon(_nftId, 1)
+        notPaused()
+    {
         //    have premium hp
         require(getHp(_nftId) >= premiumHp, "H"); // Raise your hp to claim cashback
         // didn't get cashback in last 7 days or first time (0)
@@ -636,7 +619,7 @@ contract VNFTxV4 is
             _addons[index] = (addonsConsumed[_nftId].at(index));
             index = index + 1;
         }
-    }    
+    }
 
     function editAddon(
         uint256 _id,
@@ -679,7 +662,7 @@ contract VNFTxV4 is
     function unlockAddon(uint256 _id) public onlyOwner {
         lockedAddons.remove(_id);
     }
-    
+
     /*
     function setArtistPct(uint256 _newPct) external onlyOwner {
         artistPct = _newPct;
