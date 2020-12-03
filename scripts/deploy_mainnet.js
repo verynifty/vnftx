@@ -20,15 +20,15 @@ async function main() {
   //   }
   // );
   // console.log("VNFTx deployed to:", vnftx.address);
-  VNFTxV4 = await ethers.getContractFactory("VNFTxV4");
+  VNFTxV5 = await ethers.getContractFactory("VNFTxV5");
   console.log("Preparing upgrade...");
-  vnftxV4Address = await upgrades.prepareUpgrade(proxy, VNFTxV4, {
+  vnftxV5Address = await upgrades.prepareUpgrade(proxy, VNFTxV5, {
     unsafeAllowCustomTypes: true,
   });
-  console.log("VNFTxV4 at:", vnftxV4Address);
+  console.log("VNFTxV5 at:", vnftxV5Address);
   vnftx = await upgrades.upgradeProxy(
     proxy, //proxy aka original deployement
-    VNFTxV4,
+    VNFTxV5,
     { unsafeAllowCustomTypes: true }
   );
 }

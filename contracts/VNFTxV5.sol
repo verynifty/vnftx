@@ -103,7 +103,7 @@ interface IERC1155 is IERC165Upgradeable {
     ) external;
 }
 
-contract VNFTxV4 is
+contract VNFTxV5 is
     Initializable,
     OwnableUpgradeable,
     ERC1155HolderUpgradeable
@@ -196,7 +196,6 @@ contract VNFTxV4 is
      */
 
     mapping(uint256 => uint256) private petAlreadyReceivedCashback;
-
 
     constructor() public {}
 
@@ -477,8 +476,10 @@ contract VNFTxV4 is
         require(getHp(_nftId) >= premiumHp, "H"); // Raise your hp to claim cashback
         // didn't get cashback in last 7 days or first time (0)
         require(
-            toReceiveCashback[msg.sender] <= block.timestamp && petAlreadyReceivedCashback[_nftId] <= block.timestamp ||
-                (toReceiveCashback[msg.sender] == 0 && petAlreadyReceivedCashback[_nftId] == 0),
+            (toReceiveCashback[msg.sender] <= block.timestamp &&
+                petAlreadyReceivedCashback[_nftId] <= block.timestamp) ||
+                (toReceiveCashback[msg.sender] == 0 &&
+                    petAlreadyReceivedCashback[_nftId] == 0),
             "I"
         ); // You can't claim cahsback yet
 
