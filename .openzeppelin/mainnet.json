@@ -696,6 +696,271 @@
           }
         }
       }
+    },
+    "da420dc98ffecf51e1597240ea3adb41d84d91a301c4c74b24e8035cdb73dd20": {
+      "address": "0x4b99FeE2d7Af644AB1Ee08fD9d028B8C5EB41807",
+      "txHash": "0xf36e9ff3bdca8e61da982a1d26efe2569cb0f5a109dc31996272a88e94900c43",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:23"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:28"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/GSN/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "_supportedInterfaces",
+            "type": "t_mapping(t_bytes4,t_bool)",
+            "src": "@openzeppelin/contracts-upgradeable/introspection/ERC165Upgradeable.sol:23"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/introspection/ERC165Upgradeable.sol:59"
+          },
+          {
+            "contract": "ERC1155ReceiverUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155ReceiverUpgradeable.sol:24"
+          },
+          {
+            "contract": "ERC1155HolderUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155HolderUpgradeable.sol:27"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "paused",
+            "type": "t_bool",
+            "src": "contracts/VNFTxV4.sol:114"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "vnft",
+            "type": "t_contract(IVNFT)17663",
+            "src": "contracts/VNFTxV4.sol:116"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "muse",
+            "type": "t_contract(IMuseToken)17498",
+            "src": "contracts/VNFTxV4.sol:117"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "addons",
+            "type": "t_contract(IERC1155)14022",
+            "src": "contracts/VNFTxV4.sol:118"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "artistPct",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:120"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "addon",
+            "type": "t_mapping(t_uint256,t_struct(Addon)14058_storage)",
+            "src": "contracts/VNFTxV4.sol:135"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "addonsConsumed",
+            "type": "t_mapping(t_uint256,t_struct(UintSet)1044_storage)",
+            "src": "contracts/VNFTxV4.sol:137"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "lockedAddons",
+            "type": "t_struct(UintSet)1044_storage",
+            "src": "contracts/VNFTxV4.sol:138"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "rarity",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "contracts/VNFTxV4.sol:141"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "challengesUsed",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "contracts/VNFTxV4.sol:142"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "healthGemScore",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:145"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "healthGemId",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:146"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "healthGemPrice",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:147"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "healthGemDays",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:148"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "premiumHp",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:151"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "hpMultiplier",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:152"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "rarityMultiplier",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:153"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "addonsMultiplier",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:154"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "expectedAddons",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:156"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "expectedRarity",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:158"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "_addonId",
+            "type": "t_struct(Counter)704_storage",
+            "src": "contracts/VNFTxV4.sol:161"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "cashbackPct",
+            "type": "t_uint256",
+            "src": "contracts/VNFTxV4.sol:165"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "hpLostOnBattle",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "contracts/VNFTxV4.sol:185"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "timesAttacked",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "contracts/VNFTxV4.sol:186"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "toReceiveCashback",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts/VNFTxV4.sol:188"
+          },
+          {
+            "contract": "VNFTxV4",
+            "label": "alreadyReceivedCashback",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "src": "contracts/VNFTxV4.sol:189"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_contract(IVNFT)17663": {
+            "label": "contract IVNFT"
+          },
+          "t_contract(IMuseToken)17498": {
+            "label": "contract IMuseToken"
+          },
+          "t_contract(IERC1155)14022": {
+            "label": "contract IERC1155"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint256,t_struct(Addon)14058_storage)": {
+            "label": "mapping(uint256 => struct VNFTxV4.Addon)"
+          },
+          "t_mapping(t_uint256,t_struct(UintSet)1044_storage)": {
+            "label": "mapping(uint256 => struct EnumerableSetUpgradeable.UintSet)"
+          },
+          "t_struct(UintSet)1044_storage": {
+            "label": "struct EnumerableSetUpgradeable.UintSet"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)"
+          },
+          "t_struct(Counter)704_storage": {
+            "label": "struct CountersUpgradeable.Counter"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_mapping(t_bytes4,t_bool)": {
+            "label": "mapping(bytes4 => bool)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_address": {
+            "label": "address"
+          }
+        }
+      }
     }
   },
   "admin": {
