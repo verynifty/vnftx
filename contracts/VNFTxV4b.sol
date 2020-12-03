@@ -349,6 +349,29 @@ contract VNFTxV4 is
         emit AttachAddon(_addonID, _nftId);
     }
 
+    /*
+    function transferAddon(
+        uint256 _nftId,
+        uint256 _addonID,
+        uint256 _toId
+    ) external tokenOwner(_nftId) notLocked(_addonID) {
+        Addon storage _addon = addon[_addonID];
+
+        require(
+            getHp(_toId) >= _addon.requiredhp,
+            "8"
+        ); // Raise your HP to use this addon
+        emit RemoveAddon(_addonID, _nftId);
+        emit AttachAddon(_addonID, _toId);
+
+        addonsConsumed[_nftId].remove(_addonID);
+        rarity[_nftId] = rarity[_nftId].sub(_addon.rarity);
+
+        addonsConsumed[_toId].add(_addonID);
+        rarity[_toId] = rarity[_toId].add(_addon.rarity);
+    }
+    */
+
     function removeAddon(uint256 _nftId, uint256 _addonID)
         public
         tokenOwner(_nftId)
@@ -543,6 +566,37 @@ contract VNFTxV4 is
         emit CreateAddon(newAddonId, _type, _rarity, _quantity);
     }
 
+    // function createAddonAndSend(
+    //     string calldata _type,
+    //     uint256 _hp,
+    //     uint256 _rarity,
+    //     string calldata _artistName,
+    //     address _artist,
+    //     uint256 _quantity,
+    //     bool _lock
+    // ) external onlyOwner {
+    //     _addonId.increment();
+    //     uint256 newAddonId = _addonId.current();
+
+    //     addon[newAddonId] = Addon(
+    //         _type,
+    //         0,
+    //         _hp,
+    //         _rarity,
+    //         _artistName,
+    //         _artist,
+    //         _quantity,
+    //         _quantity //used must be set as quantity to avoid people trying to buy
+    //     );
+    //     addons.mint(address(msg.sender), newAddonId, _quantity, "");
+
+    //     if (_lock) {
+    //         lockAddon(newAddonId);
+    //     }
+
+    //     emit CreateAddon(newAddonId, _type, _rarity, _quantity);
+    // }
+
     function getVnftInfo(uint256 _nftId)
         public
         view
@@ -602,6 +656,14 @@ contract VNFTxV4 is
     function lockAddon(uint256 _id) public onlyOwner {
         lockedAddons.add(_id);
     }
+
+    // function unlockAddon(uint256 _id) public onlyOwner {
+    //     lockedAddons.remove(_id);
+    // }
+
+    // function setArtistPct(uint256 _newPct) external onlyOwner {
+    //     artistPct = _newPct;
+    // }
 
     function setHealthStrat(
         uint256 _score,
