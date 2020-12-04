@@ -47,11 +47,17 @@ async function main() {
   await NFT3.mint("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266");
   await NFT3.mint("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266");
   await NFT3.mint("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266");
-
   await NFT3.mint("0x1111111111111111111111111111111111111111");
+
+  let entryPrice = "100000000000000000" // 0.1 ether
+  let raceTime = 60 * 60 *6 // 6 hours
+  let devAddress = "0x1111111111111111111111111111111111111111" // the address that will receive the fees
+
+  await NFTRace.setRaceParameters(entryPrice, raceTime, devAddress, 5);
 
   /* At this point everything is deployed and the owner has 3 NFT of each */
 
+    
 
 
 }
