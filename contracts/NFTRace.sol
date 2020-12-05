@@ -35,8 +35,8 @@ contract NFTRace is Ownable {
 
     address payable raceMaster = address(0);
 
-    event raceEnded(uint256 prize, address winner);
-    event participantEntered(uint256 bet, address who);
+    event raceEnded(uint256 currentRace, uint256 prize, address winner);
+    event participantEntered(uint256 currentRace, uint256 bet, address who, address tokenAddress, uint256 tokenId);
 
     constructor() public {}
 
@@ -50,11 +50,12 @@ contract NFTRace is Ownable {
         raceDuration = _raceDuration;
         devAddress = _devAddress;
         devPercent = _devPercent;
+        raceStart[currentRace] = now;
     }
 
     function settleRaceIfPossible() public {
         if (
-            raceStart[currentRace] + raceDuration < now ||
+            raceStart[currentRace] + raceDuration >= now ||
             raceParticipants[currentRace] >= maxParticipants
         ) {
             uint256 maxScore = 0;
@@ -71,7 +72,15 @@ contract NFTRace is Ownable {
                     maxScore = participants[currentRace][i].score;
                 }
             }
+             emit raceEnded(
+                currentRace,
+                participants[currentRace].length.mul(entryPrice).mul(95).div(
+                    100
+                ),
+                winner
+            );
             currentRace = currentRace.add(1);
+            raceStart[currentRace] = now;
             winner.transfer(
                 participants[currentRace].length.mul(entryPrice).mul(95).div(
                     100
@@ -81,12 +90,7 @@ contract NFTRace is Ownable {
                 participants[currentRace].length.mul(entryPrice).mul(5).div(100)
             );
             //Emit race won event
-            emit raceEnded(
-                participants[currentRace].length.mul(entryPrice).mul(95).div(
-                    100
-                ),
-                winner
-            );
+           
         }
     }
 
@@ -108,7 +112,6 @@ contract NFTRace is Ownable {
     ) public payable {
         require(msg.value == entryPrice, "Not enough ETH to participate");
         require(tokenParticipants[getParticipantId(_tokenAddress, _tokenId, _tokenType, currentRace)] == false, "This NFT is already registered for the race");
-        require(whitelist[_tokenAddress] > 0, "This NFT is not whitelisted");
         if (_tokenType == 725) {
             require(
                 IERC721(_tokenAddress).ownerOf(_tokenId) == msg.sender,
@@ -123,8 +126,8 @@ contract NFTRace is Ownable {
         participants[currentRace].push(
             Participant(_tokenAddress, _tokenId, 0, msg.sender)
         );
+        emit participantEntered(currentRace, entryPrice, msg.sender, _tokenAddress, _tokenId);
         settleRaceIfPossible(); // this will launch the previous race if possible
-        emit participantEntered(entryPrice, msg.sender);
     }
 
     function getRaceInfo(uint256 raceNumber)
