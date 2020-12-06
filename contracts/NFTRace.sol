@@ -153,7 +153,7 @@ contract NFTRace is Ownable {
             )] == false,
             "This NFT is already registered for the race"
         );
-        if (_tokenType == 725) {
+        if (_tokenType == 721) {
             require(
                 IERC721(_tokenAddress).ownerOf(_tokenId) == msg.sender,
                 "You don't own the NFT"
@@ -163,6 +163,8 @@ contract NFTRace is Ownable {
                 IERC1155(_tokenAddress).balanceOf(msg.sender, _tokenId) > 0,
                 "You don't own the NFT"
             );
+        } else {
+            require(false, "Wrong NFT Type");
         }
         participants[currentRace].push(
             Participant(_tokenAddress, _tokenId, 0, msg.sender)
