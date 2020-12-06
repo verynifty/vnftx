@@ -72,24 +72,24 @@ async function main() {
     })
 
     /* At this point everything is deployed and the owner has 3 NFT of each */
-    await NFTRace.joinRace(NFT1.address, 0, 725);
+    await NFTRace.joinRace(NFT1.address, 0, 721);
 
     try {
-        await NFTRace.joinRace(NFT1.address, 0, 725);
+        await NFTRace.joinRace(NFT1.address, 0, 721);
     } catch (error) {
         console.log("Can't join same race with same NFT");
     }
     await getRaceInfo()
-    await NFTRace.joinRace(NFT1.address, 1, 725);
-    await NFTRace.joinRace(NFT1.address, 2, 725);
+    await NFTRace.joinRace(NFT1.address, 1, 721);
+    await NFTRace.joinRace(NFT1.address, 2, 721);
     await getRaceInfo()
-    await NFTRace.joinRace(NFT2.address, 0, 725);
-    await NFTRace.joinRace(NFT2.address, 1, 725);
+    await NFTRace.joinRace(NFT2.address, 0, 721);
+    await NFTRace.joinRace(NFT2.address, 1, 721);
     await getRaceInfo()
-    await NFTRace.joinRace(NFT2.address, 2, 725);
-    await NFTRace.joinRace(NFT3.address, 0, 725);
-    await NFTRace.joinRace(NFT3.address, 1, 725);
-    await NFTRace.joinRace(NFT3.address, 2, 725);
+    await NFTRace.joinRace(NFT2.address, 2, 721);
+    await NFTRace.joinRace(NFT3.address, 0, 721);
+    await NFTRace.joinRace(NFT3.address, 1, 721);
+    await NFTRace.joinRace(NFT3.address, 2, 721);
    // await getRaceInfo()
 
 
