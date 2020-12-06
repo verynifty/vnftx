@@ -84,12 +84,7 @@ async function main() {
     await NFTRace.joinRace(NFT1.address, 2, 721);
     await getRaceInfo()
     await NFTRace.joinRace(NFT2.address, 0, 721);
-    await NFTRace.joinRace(NFT2.address, 1, 721);
-    await getRaceInfo()
-    await NFTRace.joinRace(NFT2.address, 2, 721);
-    await NFTRace.joinRace(NFT3.address, 0, 721);
-    await NFTRace.joinRace(NFT3.address, 1, 721);
-    await NFTRace.joinRace(NFT3.address, 2, 721);
+
    // await getRaceInfo()
 
 

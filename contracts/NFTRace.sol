@@ -13,8 +13,7 @@ contract NFTRace is Ownable {
     using SafeMath for uint256;
 
     uint256 public currentRace = 0;
-    uint256 public constant maxParticipants = 4;
-    uint256 public minParticipant = 2;
+    uint256 public constant maxParticipants = 6;
 
     struct Participant {
         address nftContract;
