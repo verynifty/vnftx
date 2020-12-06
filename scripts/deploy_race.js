@@ -5,6 +5,13 @@ const BigNumber = require("bignumber.js");
 
 const fs = require("fs");
 async function main() {
+
+    async function getRaceInfo() {
+        let currentRace = await NFTRace.currentRace()
+        let raceInfo = await NFTRace.getRaceInfo(currentRace)
+        console.log("Current race #" + raceInfo._raceNumber.toString() + " with "+ raceInfo._participantsCount.toString() + " participants")
+    }
+
     // this is to test based on tutorial in case
     // const Box = await ethers.getContractFactory("Box");
     // console.log("Deploying Box...");
@@ -55,14 +62,15 @@ async function main() {
     let devAddress = "0x1111111111111111111111111111111111111111" // the address that will receive the fees
 
     await NFTRace.setRaceParameters(entryPrice, raceTime, devAddress, 5);
+
     await NFTRace.on('participantEntered', function (currentRace, betSize, participant, tokenAddress, tokenId) {
-        console.log(betSize + " Joined the race " + currentRace.toString() + " with NFT: " + tokenAddress + "::" + tokenId.toString())
+        console.log(participant + " Joined the race " + currentRace.toString() + " with NFT: " + tokenAddress + "::" + tokenId.toString())
     })
 
     await NFTRace.on('raceEnded', function (currentRace, prize, winner) {
         console.log(winner + " won " + prize.toString() + " at the race " + currentRace.toString())
     })
-    
+
     /* At this point everything is deployed and the owner has 3 NFT of each */
     await NFTRace.joinRace(NFT1.address, 0, 725);
 
@@ -71,6 +79,19 @@ async function main() {
     } catch (error) {
         console.log("Can't join same race with same NFT");
     }
+    await getRaceInfo()
+    await NFTRace.joinRace(NFT1.address, 1, 725);
+    await NFTRace.joinRace(NFT1.address, 2, 725);
+    await getRaceInfo()
+    await NFTRace.joinRace(NFT2.address, 0, 725);
+    await NFTRace.joinRace(NFT2.address, 1, 725);
+    await getRaceInfo()
+    await NFTRace.joinRace(NFT2.address, 2, 725);
+    await NFTRace.joinRace(NFT3.address, 0, 725);
+    await NFTRace.joinRace(NFT3.address, 1, 725);
+    await NFTRace.joinRace(NFT3.address, 2, 725);
+   // await getRaceInfo()
+
 
 }
 
