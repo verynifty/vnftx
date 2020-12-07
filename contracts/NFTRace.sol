@@ -25,7 +25,6 @@ contract NFTRace is Ownable {
     mapping(uint256 => Participant[]) public participants; 
     mapping(uint256 => uint256) public raceStart;
     mapping(uint256 => uint256) public raceEnd;
-    mapping(uint256 => uint256) public raceMaxScore;
     mapping(uint256 => uint256) public raceWinner;
 
     mapping(address => uint256) public whitelist; //holds percent of bonus per projects
@@ -47,7 +46,9 @@ contract NFTRace is Ownable {
         uint256 tokenId
     );
 
-    constructor() public {}
+    constructor() public {
+        raceStart[currentRace] = now;
+    }
 
     function setRaceParameters(
         uint256 _entryPrice,
@@ -59,7 +60,6 @@ contract NFTRace is Ownable {
         raceDuration = _raceDuration;
         devAddress = _devAddress;
         devPercent = _devPercent;
-        raceStart[currentRace] = now;
     }
 
     function setBonusPercent(
