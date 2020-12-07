@@ -111,11 +111,10 @@ contract NFTRace is Ownable {
                 participants[currentRace].length.mul(entryPrice).mul(95).div(
                     100
                 )
-            ); //Check reentrency
-            raceMaster.transfer(
-                participants[currentRace].length.mul(entryPrice).mul(5).div(100)
             );
-            //Emit race won event
+            raceMaster.transfer(
+               address(this).balance
+            );
         }
     }
 
