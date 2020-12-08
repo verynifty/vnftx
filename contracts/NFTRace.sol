@@ -22,7 +22,7 @@ contract NFTRace is Ownable {
         address payable add;
     }
 
-    mapping(uint256 => Participant[]) public participants; 
+    mapping(uint256 => Participant[]) public participants;
     mapping(uint256 => uint256) public raceStart;
     mapping(uint256 => uint256) public raceEnd;
     mapping(uint256 => uint256) public raceWinner;
@@ -62,14 +62,15 @@ contract NFTRace is Ownable {
         devPercent = _devPercent;
     }
 
-    function setBonusPercent(
-        address _nftToken,
-        uint256 _percent
-    ) public onlyOwner {
+    function setBonusPercent(address _nftToken, uint256 _percent)
+        public
+        onlyOwner
+    {
         whitelist[_nftToken] = _percent;
     }
 
     function settleRaceIfPossible() public {
+        //Shouldn't this be >=now?
         if (
             raceStart[currentRace] + raceDuration <= now ||
             participants[currentRace].length >= maxParticipants
@@ -78,9 +79,15 @@ contract NFTRace is Ownable {
             address payable winner = address(0);
             console.log("Max score %s", maxScore);
             // logic to distribute prize
-            uint256 baseSeed = randomNumber(currentRace + now + raceStart[currentRace], 256256256256);
+            uint256 baseSeed = randomNumber(
+                currentRace + now + raceStart[currentRace],
+                256256256256
+            );
             for (uint256 i; i < participants[currentRace].length; i++) {
-                participants[currentRace][i].score = randomNumber(i * baseSeed, 999)
+                participants[currentRace][i].score = randomNumber(
+                    i * baseSeed,
+                    999
+                )
                     .mul(
                     100 + whitelist[participants[currentRace][i].nftContract]
                 )
@@ -104,17 +111,19 @@ contract NFTRace is Ownable {
                 ),
                 winner
             );
+
             raceEnd[currentRace] = now;
             currentRace = currentRace + 1;
+            // ending and starting race at same time, shouldn't this be -1?
             raceStart[currentRace] = now;
+
+            //Entry price is always 0.1 eth, the winner should win more?
             winner.transfer(
                 participants[currentRace].length.mul(entryPrice).mul(95).div(
                     100
                 )
             );
-            raceMaster.transfer(
-               address(this).balance
-            );
+            raceMaster.transfer(address(this).balance);
         }
     }
 
