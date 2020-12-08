@@ -71,6 +71,7 @@ contract NFTRace is Ownable {
 
     function settleRaceIfPossible() public {
         //Shouldn't this be >=now?
+        // No cause the condition is: Did the timethe race started + the time theraceshould take is after now
         if (
             raceStart[currentRace] + raceDuration <= now ||
             participants[currentRace].length >= maxParticipants
@@ -113,16 +114,15 @@ contract NFTRace is Ownable {
             );
 
             raceEnd[currentRace] = now;
-            currentRace = currentRace + 1;
-            // ending and starting race at same time, shouldn't this be -1?
-            raceStart[currentRace] = now;
-
-            //Entry price is always 0.1 eth, the winner should win more?
-            winner.transfer(
+            // The entry priceis multiplied by the number of participants
+             winner.transfer(
                 participants[currentRace].length.mul(entryPrice).mul(95).div(
                     100
                 )
             );
+            currentRace = currentRace + 1;
+            // We set the time for the new race (so after the + 1)
+            raceStart[currentRace] = now;
             raceMaster.transfer(address(this).balance);
         }
     }
@@ -182,9 +182,7 @@ contract NFTRace is Ownable {
             _tokenType,
             currentRace
         )] = true;
-        /*
-         **
-         */
+
         emit participantEntered(
             currentRace,
             entryPrice,
