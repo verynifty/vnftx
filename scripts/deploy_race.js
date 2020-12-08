@@ -58,8 +58,9 @@ async function main() {
 
     let entryPrice = "100000000000000000" // 0.1 ether
     entryPrice = "0"
-    let raceTime = 60 * 60 * 6 // 6 hours
+    let raceTime = 60 * 25 // 25 minutes 
     let devAddress = "0x1111111111111111111111111111111111111111" // the address that will receive the fees
+    await ethers.provider.send("evm_increaseTime", [60]); // add minute
 
     await NFTRace.setRaceParameters(entryPrice, raceTime, devAddress, 5);
 
@@ -72,20 +73,25 @@ async function main() {
     })
 
     /* At this point everything is deployed and the owner has 3 NFT of each */
-    await NFTRace.joinRace(NFT1.address, 0, 721);
 
-    try {
-        await NFTRace.joinRace(NFT1.address, 0, 721);
-    } catch (error) {
-        console.log("Can't join same race with same NFT");
-    }
-    await getRaceInfo()
-    await NFTRace.joinRace(NFT1.address, 1, 721);
-    await NFTRace.joinRace(NFT1.address, 2, 721);
-    await getRaceInfo()
-    await NFTRace.joinRace(NFT2.address, 0, 721);
 
    // await getRaceInfo()
+
+   while (true) {
+    await NFTRace.joinRace(NFT1.address, 0, 721);
+
+    await NFTRace.joinRace(NFT1.address, 1, 721);
+    await NFTRace.joinRace(NFT1.address, 2, 721);
+    await NFTRace.joinRace(NFT2.address, 0, 721);
+    await new Promise(r => setTimeout(r, 10000));
+    await getRaceInfo()
+ 
+    await NFTRace.joinRace(NFT3.address, 1, 721);
+    await NFTRace.joinRace(NFT3.address, 2, 721);
+   }
+
+   await getRaceInfo()
+
 
 
 }
