@@ -95,9 +95,9 @@ contract NFTRace is Ownable {
             for (uint256 i; i < participants[currentRace].length; i++) {
                 participants[currentRace][i].score =
                     (baseSeed * (i + 5 + currentRace)) %
-                    (100 + whitelist[participants[currentRace][i].nftContract]);
+                    (10000 + whitelist[participants[currentRace][i].nftContract] * 100);
 
-                if (participants[currentRace][i].score > maxScore) {
+                if (participants[currentRace][i].score >= maxScore) {
                     winner = participants[currentRace][i].add;
                     maxScore = participants[currentRace][i].score;
                     raceWinner[currentRace] = i;
