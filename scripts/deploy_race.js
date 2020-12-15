@@ -30,11 +30,15 @@ async function main() {
     const NFT2 = await deploy("VNFT", [MuseToken.address]);
     const NFT3 = await deploy("VNFT", [MuseToken.address]);
 
-    const NFTRace = await deploy("NFTRace");
+    const NFTRace = await deploy("NFTRace", [NFT1.address]);
 
     await NFT1.grantRole(
         "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6",
         "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+    );
+    await NFT1.grantRole(
+        "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6",
+        NFTRace.address
     );
     await NFT2.grantRole(
         "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6",

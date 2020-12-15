@@ -9,6 +9,10 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 import "hardhat/console.sol";
 
+interface IERC721Mintable {
+    function mint(address to) external;
+}
+
 contract NFTRace is Ownable {
     using SafeMath for uint256;
 
@@ -37,6 +41,8 @@ contract NFTRace is Ownable {
 
     address payable raceMaster = address(0);
 
+    IERC721Mintable public immutable vnft;
+
     event raceEnded(uint256 currentRace, uint256 prize, address winner);
     event participantEntered(
         uint256 currentRace,
@@ -46,7 +52,8 @@ contract NFTRace is Ownable {
         uint256 tokenId
     );
 
-    constructor() public {
+    constructor(IERC721Mintable _vnft) public {
+        vnft = _vnft;
         raceStart[currentRace] = now;
     }
 
@@ -82,17 +89,10 @@ contract NFTRace is Ownable {
             // logic to distribute prize
             uint256 baseSeed = randomNumber(
                 currentRace + now + raceStart[currentRace],
-                256256256256
+                256256256256256256256257256256
             );
             for (uint256 i; i < participants[currentRace].length; i++) {
-                participants[currentRace][i].score = randomNumber(
-                    i * baseSeed,
-                    999
-                )
-                    .mul(
-                    100 + whitelist[participants[currentRace][i].nftContract]
-                )
-                    .div(100); // Need to check this one more
+                participants[currentRace][i].score = (baseSeed * (i + 5 + currentRace)) % (100 + whitelist[participants[currentRace][i].nftContract]);
                 console.log(
                     "generatedMax %s",
                     participants[currentRace][i].score
@@ -105,6 +105,7 @@ contract NFTRace is Ownable {
                 }
                 console.log("Max score %s", maxScore);
             }
+           
             emit raceEnded(
                 currentRace,
                 participants[currentRace].length.mul(entryPrice).mul(95).div(
@@ -114,12 +115,15 @@ contract NFTRace is Ownable {
             );
 
             raceEnd[currentRace] = now;
-            // The entry priceis multiplied by the number of participants
+            // The entry price is multiplied by the number of participants
              winner.transfer(
-                participants[currentRace].length.mul(entryPrice).mul(95).div(
+                participants[currentRace].length.mul(entryPrice).mul(90).div(
                     100
                 )
             );
+             if (baseSeed % 100 < 10) { // 10% luck to get a vnft
+                vnft.mint(address(winner));
+            }
             currentRace = currentRace + 1;
             // We set the time for the new race (so after the + 1)
             raceStart[currentRace] = now;
@@ -222,7 +226,7 @@ contract NFTRace is Ownable {
         returns (uint256 _randomNumber)
     {
         uint256 n = 0;
-        for (uint256 i = 0; i < 2; i++) {
+        for (uint256 i = 0; i < 3; i++) {
             n += uint256(
                 keccak256(
                     abi.encodePacked(blockhash(block.number - i - 1), seed)
