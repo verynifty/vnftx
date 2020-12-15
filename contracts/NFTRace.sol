@@ -78,8 +78,8 @@ contract NFTRace is Ownable {
         //Shouldn't this be >=now?
         // No cause the condition is: Did the timethe race started + the time theraceshould take is after now
         if (
-            raceStart[currentRace] + raceDuration <= now ||
-            participants[currentRace].length >= maxParticipants
+            (raceStart[currentRace] + raceDuration <= now ||
+            participants[currentRace].length >= maxParticipants) && participants[currentRace].length > 1
         ) {
             uint256 maxScore = 0;
             address payable winner = address(0);
