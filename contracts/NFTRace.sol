@@ -90,7 +90,7 @@ contract NFTRace is Ownable {
             uint256 baseSeed = randomNumber(
                 currentRace + now + raceStart[currentRace],
                 256256256256256256256257256256
-            );
+            ) + 100;
             for (uint256 i; i < participants[currentRace].length; i++) {
                 participants[currentRace][i].score = (baseSeed * (i + 5 + currentRace)) % (100 + whitelist[participants[currentRace][i].nftContract]);
                 console.log(
@@ -117,7 +117,7 @@ contract NFTRace is Ownable {
             raceEnd[currentRace] = now;
             // The entry price is multiplied by the number of participants
              winner.transfer(
-                participants[currentRace].length.mul(entryPrice).mul(90).div(
+                participants[currentRace].length.mul(entryPrice).mul(100 - devPercent).div(
                     100
                 )
             );
