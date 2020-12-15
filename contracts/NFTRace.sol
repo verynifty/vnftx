@@ -7,8 +7,6 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-import "hardhat/console.sol";
-
 interface IERC721Mintable {
     function mint(address to) external;
 }
@@ -43,7 +41,7 @@ contract NFTRace is Ownable {
 
     IERC721Mintable public immutable vnft;
 
-    event raceEnded(uint256 currentRace, uint256 prize, address winner);
+    event raceEnded(uint256 currentRace, uint256 prize, address winner, bool wonNFT);
     event participantEntered(
         uint256 currentRace,
         uint256 bet,
@@ -85,33 +83,29 @@ contract NFTRace is Ownable {
         ) {
             uint256 maxScore = 0;
             address payable winner = address(0);
-            console.log("Max score %s", maxScore);
             // logic to distribute prize
             uint256 baseSeed = randomNumber(
                 currentRace + now + raceStart[currentRace],
                 256256256256256256256257256256
-            ) + 100;
+            ) + 2525252511;
             for (uint256 i; i < participants[currentRace].length; i++) {
                 participants[currentRace][i].score = (baseSeed * (i + 5 + currentRace)) % (100 + whitelist[participants[currentRace][i].nftContract]);
-                console.log(
-                    "generatedMax %s",
-                    participants[currentRace][i].score
-                );
+
 
                 if (participants[currentRace][i].score > maxScore) {
                     winner = participants[currentRace][i].add;
                     maxScore = participants[currentRace][i].score;
                     raceWinner[currentRace] = i;
                 }
-                console.log("Max score %s", maxScore);
             }
            
             emit raceEnded(
                 currentRace,
-                participants[currentRace].length.mul(entryPrice).mul(95).div(
+                participants[currentRace].length.mul(entryPrice).mul(100 - devPercent).div(
                     100
                 ),
-                winner
+                winner,
+                (baseSeed % 100 < 10)
             );
 
             raceEnd[currentRace] = now;
