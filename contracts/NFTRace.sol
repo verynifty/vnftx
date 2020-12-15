@@ -37,11 +37,14 @@ contract NFTRace is Ownable {
 
     mapping(bytes32 => bool) public tokenParticipants;
 
-    address payable raceMaster = address(0);
-
     IERC721Mintable public immutable vnft;
 
-    event raceEnded(uint256 currentRace, uint256 prize, address winner, bool wonNFT);
+    event raceEnded(
+        uint256 currentRace,
+        uint256 prize,
+        address winner,
+        bool wonNFT
+    );
     event participantEntered(
         uint256 currentRace,
         uint256 bet,
@@ -79,7 +82,8 @@ contract NFTRace is Ownable {
         // No cause the condition is: Did the timethe race started + the time theraceshould take is after now
         if (
             (raceStart[currentRace] + raceDuration <= now ||
-            participants[currentRace].length >= maxParticipants) && participants[currentRace].length > 1
+                participants[currentRace].length >= maxParticipants) &&
+            participants[currentRace].length > 1
         ) {
             uint256 maxScore = 0;
             address payable winner = address(0);
@@ -89,8 +93,9 @@ contract NFTRace is Ownable {
                 256256256256256256256257256256
             ) + 2525252511;
             for (uint256 i; i < participants[currentRace].length; i++) {
-                participants[currentRace][i].score = (baseSeed * (i + 5 + currentRace)) % (100 + whitelist[participants[currentRace][i].nftContract]);
-
+                participants[currentRace][i].score =
+                    (baseSeed * (i + 5 + currentRace)) %
+                    (100 + whitelist[participants[currentRace][i].nftContract]);
 
                 if (participants[currentRace][i].score > maxScore) {
                     winner = participants[currentRace][i].add;
@@ -98,30 +103,35 @@ contract NFTRace is Ownable {
                     raceWinner[currentRace] = i;
                 }
             }
-           
+
             emit raceEnded(
                 currentRace,
-                participants[currentRace].length.mul(entryPrice).mul(100 - devPercent).div(
-                    100
-                ),
+                participants[currentRace]
+                    .length
+                    .mul(entryPrice)
+                    .mul(100 - devPercent)
+                    .div(100),
                 winner,
                 (baseSeed % 100 < 10)
             );
 
             raceEnd[currentRace] = now;
             // The entry price is multiplied by the number of participants
-             winner.transfer(
-                participants[currentRace].length.mul(entryPrice).mul(100 - devPercent).div(
-                    100
-                )
+            winner.transfer(
+                participants[currentRace]
+                    .length
+                    .mul(entryPrice)
+                    .mul(100 - devPercent)
+                    .div(100)
             );
-             if (baseSeed % 100 < 10) { // 10% luck to get a vnft
+            if (baseSeed % 100 < 10) {
+                // 10% luck to get a vnft
                 vnft.mint(address(winner));
             }
             currentRace = currentRace + 1;
             // We set the time for the new race (so after the + 1)
             raceStart[currentRace] = now;
-            raceMaster.transfer(address(this).balance);
+            devAddress.transfer(address(this).balance);
         }
     }
 
