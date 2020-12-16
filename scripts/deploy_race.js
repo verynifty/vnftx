@@ -113,6 +113,8 @@ async function main() {
 
     await NFTRace.joinRace(NFT3.address, 1, 721, { value: entryPrice });
     await NFTRace.joinRace(NFT3.address, 2, 721, { value: entryPrice });
+
+    console.log("Total NFT Supply" + (await NFT1.totalSupply()).toString());
   }
 
   await getRaceInfo();

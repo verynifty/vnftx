@@ -20,17 +20,19 @@ async function main() {
   //   }
   // );
   // console.log("VNFTx deployed to:", vnftx.address);
-  VNFTxV5 = await ethers.getContractFactory("VNFTxV5");
-  console.log("Preparing upgrade...");
-  vnftxV5Address = await upgrades.prepareUpgrade(proxy, VNFTxV5, {
-    unsafeAllowCustomTypes: true,
-  });
-  console.log("VNFTxV5 at:", vnftxV5Address);
-  vnftx = await upgrades.upgradeProxy(
-    proxy, //proxy aka original deployement
-    VNFTxV5,
-    { unsafeAllowCustomTypes: true }
-  );
+  // VNFTxV5 = await ethers.getContractFactory("VNFTxV5");
+  // console.log("Preparing upgrade...");
+  // vnftxV5Address = await upgrades.prepareUpgrade(proxy, VNFTxV5, {
+  //   unsafeAllowCustomTypes: true,
+  // });
+  // console.log("VNFTxV5 at:", vnftxV5Address);
+  // vnftx = await upgrades.upgradeProxy(
+  //   proxy, //proxy aka original deployement
+  //   VNFTxV5,
+  //   { unsafeAllowCustomTypes: true }
+  // );
+
+  const NFTRace = await deploy("NFTRace", [VNFT_CONTRACT]);
 }
 
 async function deploy(name, _args) {
