@@ -28,7 +28,6 @@ contract NiftyAnimals is Ownable, TokenRecover {
     constructor(VNFT _vnft, MuseToken _muse) public {
         vnft = _vnft;
         muse = _muse;
-        endTime = now.add(addTime);
     }
 
     function start(uint256 _gem) external onlyOwner {
@@ -39,6 +38,8 @@ contract NiftyAnimals is Ownable, TokenRecover {
             address(this),
             vnft.balanceOf(address(this)) - 1
         );
+                endTime = now.add(addTime);
+
     }
 
     function getInfos()
