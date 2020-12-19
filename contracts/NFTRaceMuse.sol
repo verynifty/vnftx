@@ -130,11 +130,8 @@ contract NFTRaceMuse is Ownable {
             raceStart[currentRace] = now;
 
             // @TODO check if balance of this is minus the "winerAmt"
-            muse.transferFrom(
-                address(this),
-                devAddress,
-                muse.balanceOf(address(this))
-            );
+
+            muse.burn(muse.balanceOf(address(this));
 
             emit raceEnded(
                 currentRace,
