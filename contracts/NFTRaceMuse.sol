@@ -35,7 +35,6 @@ contract NFTRaceMuse is Ownable {
     uint256 public entryPrice;
     uint256 public raceDuration;
     uint256 public devPercent;
-    address public devAddress;
 
     mapping(bytes32 => bool) public tokenParticipants;
 
@@ -65,12 +64,10 @@ contract NFTRaceMuse is Ownable {
     function setRaceParameters(
         uint256 _entryPrice,
         uint256 _raceDuration,
-        address _devAddress,
         uint256 _devPercent
     ) public onlyOwner {
         entryPrice = _entryPrice;
         raceDuration = _raceDuration;
-        devAddress = _devAddress;
         devPercent = _devPercent;
     }
 
