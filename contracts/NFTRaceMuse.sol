@@ -127,7 +127,6 @@ contract NFTRaceMuse is Ownable {
             raceStart[currentRace] = now;
 
             // @TODO check if balance of this is minus the "winerAmt"
-
             muse.burn(muse.balanceOf(address(this)));
 
             emit raceEnded(
@@ -161,7 +160,7 @@ contract NFTRaceMuse is Ownable {
         address _tokenAddress,
         uint256 _tokenId,
         uint256 _tokenType
-    ) public {
+    ) external {
         require(
             muse.transferFrom(msg.sender, address(this), entryPrice),
             "!Pay"
