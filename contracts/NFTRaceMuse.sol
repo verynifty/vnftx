@@ -34,7 +34,7 @@ contract NFTRaceMuse is Ownable {
     mapping(address => uint256) public whitelist; //holds percent of bonus per projects
     uint256 public entryPrice;
     uint256 public raceDuration;
-    uint256 public devPercent;
+    uint256 public burnPercent;
 
     mapping(bytes32 => bool) public tokenParticipants;
 
@@ -64,11 +64,11 @@ contract NFTRaceMuse is Ownable {
     function setRaceParameters(
         uint256 _entryPrice,
         uint256 _raceDuration,
-        uint256 _devPercent
+        uint256 _burnPercent
     ) public onlyOwner {
         entryPrice = _entryPrice;
         raceDuration = _raceDuration;
-        devPercent = _devPercent;
+        burnPercent = _burnPercent;
     }
 
     function setBonusPercent(address _nftToken, uint256 _percent)
@@ -112,7 +112,7 @@ contract NFTRaceMuse is Ownable {
             uint256 winnerAmt = participants[currentRace]
                 .length
                 .mul(entryPrice)
-                .mul(100 - devPercent)
+                .mul(100 - burnPercent)
                 .div(100);
 
             // The entry price is multiplied by the number of participants
@@ -128,7 +128,7 @@ contract NFTRaceMuse is Ownable {
 
             // @TODO check if balance of this is minus the "winerAmt"
 
-            muse.burn(muse.balanceOf(address(this));
+            muse.burn(muse.balanceOf(address(this)));
 
             emit raceEnded(
                 currentRace,
