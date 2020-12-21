@@ -32,7 +32,7 @@ async function main() {
   //   { unsafeAllowCustomTypes: true }
   // );
 
-  const NFTRace = await deploy("NFTRace", [VNFT_CONTRACT]);
+  const NFTRace = await deploy("NFTRaceMuse", [VNFT_CONTRACT, MUSE_TOKEN]);
 }
 
 async function deploy(name, _args) {

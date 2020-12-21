@@ -89,10 +89,11 @@ contract NFTRaceMuse is Ownable {
             uint256 maxScore = 0;
             address winner;
             // logic to distribute prize
-            uint256 baseSeed = randomNumber(
-                currentRace + now + raceStart[currentRace],
-                256256256256256256256257256256
-            ) + 2525252511;
+            uint256 baseSeed =
+                randomNumber(
+                    currentRace + now + raceStart[currentRace],
+                    256256256256256256256257256256
+                ) + 2525252511;
             for (uint256 i; i < participants[currentRace].length; i++) {
                 participants[currentRace][i].score =
                     (baseSeed * (i + 5 + currentRace)) %
@@ -109,24 +110,20 @@ contract NFTRaceMuse is Ownable {
 
             raceEnd[currentRace] = now;
 
-            uint256 winnerAmt = participants[currentRace]
-                .length
-                .mul(entryPrice)
-                .mul(100 - burnPercent)
-                .div(100);
+            uint256 winnerAmt =
+                participants[currentRace]
+                    .length
+                    .mul(entryPrice)
+                    .mul(100 - burnPercent)
+                    .div(100);
 
             // The entry price is multiplied by the number of participants
-            muse.transferFrom(address(this), winner, winnerAmt);
+            muse.transfer(winner, winnerAmt);
 
-            if (baseSeed % 100 < 10) {
-                // 10% luck to get a vnft
-                vnft.mint(address(winner));
-            }
             currentRace = currentRace + 1;
             // We set the time for the new race (so after the + 1)
             raceStart[currentRace] = now;
 
-            // @TODO check if balance of this is minus the "winerAmt"
             muse.burn(muse.balanceOf(address(this)));
 
             emit raceEnded(
@@ -166,12 +163,14 @@ contract NFTRaceMuse is Ownable {
             "!Pay"
         );
         require(
-            tokenParticipants[getParticipantId(
-                _tokenAddress,
-                _tokenId,
-                _tokenType,
-                currentRace
-            )] == false,
+            tokenParticipants[
+                getParticipantId(
+                    _tokenAddress,
+                    _tokenId,
+                    _tokenType,
+                    currentRace
+                )
+            ] == false,
             "This NFT is already registered for the race"
         );
         if (_tokenType == 721) {
@@ -190,12 +189,9 @@ contract NFTRaceMuse is Ownable {
         participants[currentRace].push(
             Participant(_tokenAddress, _tokenId, 0, msg.sender)
         );
-        tokenParticipants[getParticipantId(
-            _tokenAddress,
-            _tokenId,
-            _tokenType,
-            currentRace
-        )] = true;
+        tokenParticipants[
+            getParticipantId(_tokenAddress, _tokenId, _tokenType, currentRace)
+        ] = true;
 
         emit participantEntered(
             currentRace,

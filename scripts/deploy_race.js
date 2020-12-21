@@ -35,7 +35,15 @@ async function main() {
   const NFT2 = await deploy("VNFT", [MuseToken.address]);
   const NFT3 = await deploy("VNFT", [MuseToken.address]);
 
-  const NFTRace = await deploy("NFTRace", [NFT1.address]);
+  MuseToken.mint(
+    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "100000000000000000000"
+  );
+
+  const NFTRace = await deploy("NFTRaceMuse", [
+    NFT1.address,
+    MuseToken.address,
+  ]);
 
   await NFT1.grantRole(
     "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6",
@@ -71,7 +79,7 @@ async function main() {
   let devAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"; // the address that will receive the fees
   await ethers.provider.send("evm_increaseTime", [60]); // add minute
 
-  await NFTRace.setRaceParameters(entryPrice, raceTime, devAddress, 5);
+  await NFTRace.setRaceParameters(entryPrice, raceTime, 10);
 
   await NFTRace.on(
     "participantEntered",
@@ -102,19 +110,38 @@ async function main() {
 
   // await getRaceInfo()
 
-  while (true) {
-    await NFTRace.joinRace(NFT1.address, 0, 721, { value: entryPrice });
+  // approve muse for spending
+  await MuseToken.approve(
+    NFTRace.address,
+    "1000000000000000000000000000000000000000"
+  );
 
-    await NFTRace.joinRace(NFT1.address, 1, 721, { value: entryPrice });
-    await NFTRace.joinRace(NFT1.address, 2, 721, { value: entryPrice });
-    await NFTRace.joinRace(NFT2.address, 0, 721, { value: entryPrice });
+  console.log(
+    (
+      await MuseToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+    ).toString()
+  );
+
+  while (true) {
+    await NFTRace.joinRace(NFT1.address, 0, 721);
+
+    await NFTRace.joinRace(NFT1.address, 1, 721);
+    await NFTRace.joinRace(NFT1.address, 2, 721);
+    await NFTRace.joinRace(NFT2.address, 0, 721);
     await new Promise((r) => setTimeout(r, 10000));
     await getRaceInfo();
 
-    await NFTRace.joinRace(NFT3.address, 1, 721, { value: entryPrice });
-    await NFTRace.joinRace(NFT3.address, 2, 721, { value: entryPrice });
+    await NFTRace.joinRace(NFT3.address, 1, 721);
+    await NFTRace.joinRace(NFT3.address, 2, 721);
 
     console.log("Total NFT Supply" + (await NFT1.totalSupply()).toString());
+    console.log(
+      (
+        await MuseToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+      ).toString()
+    );
+
+    console.log((await MuseToken.totalSupply()).toString());
   }
 
   await getRaceInfo();
