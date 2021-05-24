@@ -146,7 +146,7 @@ contract VNFT is
         ERC721PresetMinterPauserAutoId(
             "VNFT",
             "VNFT",
-            "https://gallery.verynify.io/api/"
+            "https://gallery.verynify.io/polygon/"
         )
     {
         _setupRole(OPERATOR_ROLE, _msgSender());
@@ -382,21 +382,6 @@ contract VNFT is
         _setBaseURI(baseURI_);
     }
 
-    function mint(address player) public override onlyMinter {
-        //pet minted has 3 days until it starves at first
-        timeUntilStarving[_tokenIds.current()] = block.timestamp.add(3 days);
-        timeVnftBorn[_tokenIds.current()] = block.timestamp;
-
-        vnftDetails[_tokenIds.current()] = VNFTObj(
-            address(this),
-            _tokenIds.current(),
-            721
-        );
-        super._mint(player, _tokenIds.current());
-        _tokenIds.increment();
-        emit VnftMinted(msg.sender);
-    }
-
     // kill starverd NFT and get fatalityPct of his points.
     function fatality(uint256 _deadId, uint256 _tokenId) external notPaused {
         require(
@@ -465,8 +450,8 @@ contract VNFT is
         uint256 index,
         uint256 _id,
         uint256 nftType
-    ) external notPaused {
-        muse.burn(giveLifePrice);
+    ) external payable notPaused {
+        require(msg.value >= fee, "!money");
 
         if (nftType == 721) {
             IERC721(supportedNfts[index].token).transferFrom(
