@@ -90,10 +90,6 @@ contract VNFT is
     // Mapping from token ID to NFT struct details
     mapping(uint256 => VNFTObj) public vnftDetails;
 
-    // max dev allocation is 10% of total supply
-    uint256 public maxDevAllocation = 100000 * 10**18;
-    uint256 public devAllocation = 0;
-
     // External NFTs
     struct NFTInfo {
         address token; // Address of LP token contract.
@@ -198,10 +194,6 @@ contract VNFT is
 
     function changeGiveLifePrice(uint256 _newPrice) external onlyOperator {
         giveLifePrice = _newPrice * 10**18;
-    }
-
-    function changeMaxDevAllocation(uint256 amount) external onlyOperator {
-        maxDevAllocation = amount;
     }
 
     function itemExists(uint256 itemId) public view returns (bool) {
@@ -353,8 +345,6 @@ contract VNFT is
                 careTaker[nftId][ownerOf(nftId)] == msg.sender,
             "You must own the vNFT or be a care taker to buy items"
         );
-        // require(isVnftAlive(nftId), "Your vNFT is dead");
-        uint256 amountToBurn = amount.mul(burnPercentage).div(100);
 
         // recalculate time until starving
         timeUntilStarving[nftId] = block.timestamp.add(
@@ -367,14 +357,10 @@ contract VNFT is
         }
         // burn 90% so they go back to community mining and staking, and send 10% to devs
 
-        if (devAllocation <= maxDevAllocation) {
-            devAllocation = devAllocation.add(amount.sub(amountToBurn));
-            muse.transferFrom(msg.sender, address(this), amount);
-            // burn 90% of token, 10% stay for dev and community fund
-            muse.burn(amountToBurn);
-        } else {
-            muse.burnFrom(msg.sender, amount);
-        }
+        muse.transferFrom(msg.sender, address(this), amount);
+        // burn 90% of token, 10% stay for dev and community fund
+        muse.burn(amount);
+
         emit VnftConsumed(nftId, msg.sender, itemId);
     }
 
@@ -466,16 +452,7 @@ contract VNFT is
         uint256 _id,
         uint256 nftType
     ) external notPaused {
-        uint256 amountToBurn = giveLifePrice.mul(burnPercentage).div(100);
-
-        if (devAllocation <= maxDevAllocation) {
-            devAllocation = devAllocation.add(giveLifePrice.sub(amountToBurn));
-            muse.transferFrom(msg.sender, address(this), giveLifePrice);
-            // burn 90% of token, 10% stay for dev and community fund
-            muse.burn(amountToBurn);
-        } else {
-            muse.burnFrom(msg.sender, giveLifePrice);
-        }
+        muse.burn(giveLifePrice);
 
         if (nftType == 721) {
             IERC721(supportedNfts[index].token).transferFrom(
