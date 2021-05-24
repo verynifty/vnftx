@@ -107,6 +107,8 @@ contract VNFT is
     uint256 public burnPercentage = 90;
     uint256 public giveLifePrice = 5 * 10**18;
 
+    uint256 public fee;
+
     uint256 public fatalityPct = 60;
 
     bool public gameStopped = false;
@@ -139,7 +141,7 @@ contract VNFT is
     event CareTakerAdded(uint256 nftId, address _to);
     event CareTakerRemoved(uint256 nftId);
 
-    constructor(address _museToken)
+    constructor(address _museToken, uint256 _fee)
         public
         ERC721PresetMinterPauserAutoId(
             "VNFT",
@@ -149,6 +151,7 @@ contract VNFT is
     {
         _setupRole(OPERATOR_ROLE, _msgSender());
         muse = IMuseToken(_museToken);
+        fee = _fee;
     }
 
     modifier notPaused() {
@@ -179,6 +182,10 @@ contract VNFT is
     // in case a bug happens or we upgrade to another smart contract
     function pauseGame(bool _pause) external onlyOperator {
         gameStopped = _pause;
+    }
+
+    function changeFee(uint256 _fee) external onlyOperator {
+        fee = _fee;
     }
 
     function changeFatalityPct(uint256 _newpct) external onlyOperator {
@@ -316,7 +323,9 @@ contract VNFT is
     }
 
     //can mine once every 24 hours per token.
-    function claimMiningRewards(uint256 nftId) external notPaused {
+    function claimMiningRewards(uint256 nftId) external payable notPaused {
+        require(msg.value >= fee, "!moneys");
+
         require(isVnftAlive(nftId), "Your vNFT is dead, you can't mine");
         require(
             block.timestamp >= lastTimeMined[nftId].add(1 days) ||
@@ -337,7 +346,12 @@ contract VNFT is
     }
 
     // Buy accesory to the VNFT
-    function buyAccesory(uint256 nftId, uint256 itemId) external notPaused {
+    function buyAccesory(uint256 nftId, uint256 itemId)
+        external
+        payable
+        notPaused
+    {
+        require(msg.value >= fee, "!moneys");
         require(itemExists(itemId), "This item doesn't exist");
         uint256 amount = itemPrice[itemId];
         require(
